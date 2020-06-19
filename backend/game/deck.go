@@ -4,7 +4,7 @@ import "math/rand"
 
 // Deck definition - the deck of tiles that players draw from
 type Deck struct {
-	Tiles []Tile
+	Tiles []Tile `json:"tiles"`
 }
 
 func (deck *Deck) Shuffle() {
