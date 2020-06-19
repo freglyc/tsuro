@@ -182,13 +182,13 @@ func (game *Game) UpdateHands(turn Team) {
 		active = game.GetPlayer(turn)
 	}
 
-	if len(game.deck.Tiles) > 0 {
+	if len(game.Deck.Tiles) > 0 {
 		// Add tile to team hand if needed
 		if len(active.Hand.Tiles) < 3 {
-			active.Hand.Add(game.deck.Draw())
+			active.Hand.Add(game.Deck.Draw())
 		}
 		// If other players do not have full hands fill them
-		if len(game.deck.Tiles) > 0 && game.GetNumToFillHands() > 0 {
+		if len(game.Deck.Tiles) > 0 && game.GetNumToFillHands() > 0 {
 			game.UpdateHands(game.GetNextTurn(turn))
 		}
 	} else if game.Options.Players > 2 {

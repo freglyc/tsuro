@@ -5,7 +5,7 @@ import "math/rand"
 // GameState definition - the state of the game at a given point in time
 type GameState struct {
 	Board  [][]Tile `json:"board"` // game board
-	deck   Deck     // list of tiles in deck
+	Deck   Deck     // list of tiles in deck
 	Teams  []Player `json:"teams"`  // list of players in game
 	Turn   Team     `json:"turn"`   // current team turn
 	Winner []Team   `json:"winner"` // winning team
@@ -41,7 +41,7 @@ func NewGameState(options Options) GameState {
 	}
 	state := GameState{
 		Board:  board,
-		deck:   deck,
+		Deck:   deck,
 		Teams:  teams,
 		Turn:   teams[rand.Intn(options.Players)].Color,
 		Winner: []Team{},

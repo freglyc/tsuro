@@ -14,9 +14,12 @@ func TestMain(m *testing.M) {
 }
 
 func TestGame(t *testing.T) {
+	players := 8
+	size := 6
+
 	options := tsuro.Options{
-		Players: 8,
-		Size:    6,
+		Players: players,
+		Size:    size,
 		Time:    -1,
 	}
 	game := tsuro.NewGame("ID", options)
@@ -45,9 +48,28 @@ func TestGame(t *testing.T) {
 		t.Errorf("Failed to remove tile from hand")
 	}
 
-	// TODO Test UpdateGameState
+	// Test UpdateGameState
+	prevTurn := game.Turn
+	prevNotch := game.GetPlayer(game.Turn).Token.Notch
+	game.UpdateGameState()
+	if game.Turn == prevTurn {
+		t.Errorf("Failed to update turn")
+	}
+	if game.GetPlayer(prevTurn).Token.Notch == prevNotch {
+		t.Errorf("Failed to update token")
+	}
+	if len(game.GetPlayer(prevTurn).Hand.Tiles) != 3 {
+		t.Errorf("Failed to add tile from hand")
+	}
 
-	// TODO Test reset
+	// Test reset
+	game.Reset()
+	if game.GetNumTileOnBoard() != 0 {
+		t.Errorf("Failed to reset board")
+	}
+	if len(game.Deck.Tiles) != 35-players*3 {
+		t.Errorf("Failed to reset deck")
+	}
 }
 
 func TestTile(t *testing.T) {
