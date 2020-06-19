@@ -1,23 +1,53 @@
 package tests
 
 import (
-	"fmt"
 	"github.com/freglyc/tsuro/game"
 	"math/rand"
+	"os"
 	"testing"
 	"time"
 )
 
-func TestGame(t *testing.T) {
+func TestMain(m *testing.M) {
 	rand.Seed(time.Now().UnixNano())
+	os.Exit(m.Run())
+}
+
+func TestGame(t *testing.T) {
 	options := tsuro.Options{
 		Players: 8,
 		Size:    6,
 		Time:    -1,
 	}
-	state := tsuro.NewGameState(options)
-	fmt.Println(state.Board[0][0])
-	fmt.Println(state.Teams)
+	game := tsuro.NewGame("ID", options)
+	if len(game.GetPlayer(game.Turn).Hand.Tiles) != 3 {
+		t.Errorf("Failed to set up player hand correctly")
+	}
+
+	// Test tile rotation
+	notch := game.GetPlayer(game.Turn).Hand.Tiles[0].Edges[0][0]
+	game.RotateRight(game.Turn, 0)
+	if notch == game.GetPlayer(game.Turn).Hand.Tiles[0].Edges[0][0] {
+		t.Errorf("Failed to rotate right correctly")
+	}
+	game.RotateLeft(game.Turn, 0)
+	if notch != game.GetPlayer(game.Turn).Hand.Tiles[0].Edges[0][0] {
+		t.Errorf("Failed to rotate left correctly")
+	}
+
+	// Test place
+	space := game.GetSpace(game.Turn)
+	game.Place(space, game.Turn, 0)
+	if !game.Board[space[0]][space[1]].Exists() {
+		t.Errorf("Failed to place tile")
+	}
+	if len(game.GetPlayer(game.Turn).Hand.Tiles) != 2 {
+		t.Errorf("Failed to remove tile from hand")
+	}
+
+	// TODO Test UpdateGameState
+
+	// TODO Test reset
 }
 
 func TestTile(t *testing.T) {

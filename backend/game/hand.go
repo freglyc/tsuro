@@ -5,8 +5,8 @@ type Hand struct {
 	Tiles []Tile `json:"tiles"`
 }
 
-func NewHand() Hand {
-	return Hand{
+func NewHand() *Hand {
+	return &Hand{
 		Tiles: []Tile{},
 	}
 }
@@ -17,8 +17,6 @@ func (hand *Hand) Add(tile Tile) {
 
 func (hand *Hand) Remove(idx int) {
 	if idx < len(hand.Tiles) {
-		copy(hand.Tiles[idx:], hand.Tiles[idx+1:])
-		hand.Tiles[len(hand.Tiles)-1] = Tile{}
-		hand.Tiles = hand.Tiles[:len(hand.Tiles)-1]
+		hand.Tiles = append(hand.Tiles[:idx], hand.Tiles[idx+1:]...)
 	}
 }

@@ -8,7 +8,7 @@ type GameState struct {
 	deck   Deck     // list of tiles in deck
 	Teams  []Player `json:"teams"`  // list of players in game
 	Turn   Team     `json:"turn"`   // current team turn
-	Winner Team     `json:"winner"` // winning team
+	Winner []Team   `json:"winner"` // winning team
 
 	Started   bool `json:"started"`   // whether or not the game has started
 	Countdown int  `json:"countdown"` // time left on timer at time of sending to clients
@@ -44,7 +44,7 @@ func NewGameState(options Options) GameState {
 		deck:   deck,
 		Teams:  teams,
 		Turn:   teams[rand.Intn(options.Players)].Color,
-		Winner: Neutral,
+		Winner: []Team{},
 
 		Started:   false,
 		Countdown: options.Time,

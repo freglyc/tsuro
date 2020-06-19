@@ -11,7 +11,7 @@ type Token struct {
 	Notch Notch `json:"notch"` // where the token lies on a tile
 }
 
-func RandomToken(size int) Token {
+func RandomToken(size int) *Token {
 	notch := Notch(rand.Intn(8)) // which notch to lie on
 	side := rand.Intn(size)      // which side to lie on
 	var row = 0
@@ -30,9 +30,15 @@ func RandomToken(size int) Token {
 		row = side
 		col = 0
 	}
-	return Token{
+	return &Token{
 		Row:   row,
 		Col:   col,
 		Notch: notch,
 	}
+}
+
+func (token *Token) lost() {
+	token.Row = -1
+	token.Col = -1
+	token.Notch = None
 }

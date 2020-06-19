@@ -68,10 +68,28 @@ func (game *Game) GetNumToFillHands() int {
 	return total
 }
 
+func (game *Game) GetNumTileOnBoard() int {
+	placed := 0
+	for _, row := range game.Board {
+		for _, tile := range row {
+			// Real tile exists in this location
+			if tile.Exists() {
+				placed += 1
+			}
+		}
+	}
+	return placed
+}
+
 // Get the space that the player can team can play a tile ASSUMING the makers have been updated
 func (game *Game) GetSpace(team Team) []int {
 	player := game.GetPlayer(team)
 	var space []int
+	// If first turn of the game then return current space
+	if game.GetNumTileOnBoard() <= game.Options.Players {
+		return []int{player.Token.Row, player.Token.Col}
+	}
+	// Otherwise return next space to go to
 	switch player.Token.Notch {
 	case A, B:
 		space = []int{player.Token.Row + 1, player.Token.Col}
@@ -100,17 +118,53 @@ func (game *Game) GetNextTurn(team Team) Team {
 // GAME LOGIC
 
 // Update the tokens and tile path segments
-func (game *Game) UpdateTokens() {}
+func (game *Game) UpdateTokens() {
+	for _, player := range game.Teams {
+		space := game.GetSpace(player.Color)
+		// If a tile was placed where the player token can move then update
+		tile := game.Board[space[0]][space[1]]
+		if tile.Exists() {
+			player.Token.Row = space[0]
+			player.Token.Col = space[1]
+			player.Token.Notch = tile.GetNotch(player.Token.Notch)
+		}
+	}
+}
 
 // Update winner
 func (game *Game) UpdateWinner() {
-	alive := 0
+	var alive []Team
 	for _, player := range game.Teams {
+		// If lost then update token
+		if game.GetNumTileOnBoard() > game.Options.Players {
+			switch player.Token.Notch {
+			case A, B:
+				if player.Token.Row == 0 {
+					player.Token.lost()
+				}
+			case C, D:
+				if player.Token.Col == game.Options.Size-1 {
+					player.Token.lost()
+				}
+			case E, F:
+				if player.Token.Row == game.Options.Size-1 {
+					player.Token.lost()
+				}
+			case G, H:
+				if player.Token.Col == 0 {
+					player.Token.lost()
+				}
+			}
+		}
+		// If player still in the game
 		if player.Token.Notch != None {
-			alive += 1
+			alive = append(alive, player.Color)
 		}
 	}
-	// TODO
+	if len(alive) == 1 || game.GetNumTileOnBoard() >= 35 {
+		game.Winner = alive
+		return
+	}
 }
 
 // Update team hands
@@ -154,14 +208,14 @@ func (game *Game) UpdateTurn() {
 func (game *Game) UpdateGameState() {
 	game.UpdateTokens() // moves all tokens to correct position
 	game.UpdateWinner() // updates the winner if someone has won
-	if game.Winner != Neutral {
+	if len(game.Winner) > 0 {
 		return
 	}
 	game.UpdateHands(game.Turn) // updates all player hands
 	game.UpdateTurn()           // updates the turn
 }
 
-// PLAYER ACTIONS
+// TEAM ACTIONS
 
 // Rotate tile at index idx in team hand
 func (game *Game) RotateRight(team Team, idx int) {
@@ -186,10 +240,11 @@ func (game *Game) Place(space []int, team Team, idx int) {
 	if game.Turn == team && // team turn
 		idx < len(player.Hand.Tiles) && // the index is in the hands bounds
 		check[0] == space[0] && check[1] == space[1] && // adjacent to team token
-		len(game.Board[space[0]][space[1]].Edges) == 0 { // there in no tile in the space
+		!game.Board[space[0]][space[1]].Exists() { // there in no tile in the space
 
 		game.Board[space[0]][space[1]] = player.Hand.Tiles[idx] // add to board
 		player.Hand.Remove(idx)                                 // remove from hand
+		game.Started = true
 	}
 }
 

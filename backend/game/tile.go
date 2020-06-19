@@ -34,3 +34,11 @@ func (tile *Tile) RotateLeft() {
 		tile.Edges[i][1] = (tile.Edges[i][1] + 6) % 8
 	}
 }
+
+// True if a real tile, false if a dummy tile
+func (tile *Tile) Exists() bool {
+	if len(tile.Edges) == 0 {
+		return false
+	}
+	return true
+}
