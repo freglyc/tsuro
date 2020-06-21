@@ -7,12 +7,12 @@ import (
 )
 
 type Message struct {
-	GameID string `json:"gameID"`
-	Kind   string `json:"kind"`
-	Team   int    `json:"team"`
-	Idx    int    `json:"idx"`
-	Row    int    `json:"row"`
-	Col    int    `json:"col"`
+	GameID string     `json:"gameID"`
+	Kind   string     `json:"kind"`
+	Team   tsuro.Team `json:"team"`
+	Idx    int        `json:"idx"`
+	Row    int        `json:"row"`
+	Col    int        `json:"col"`
 
 	tsuro.Options
 }
@@ -44,8 +44,10 @@ func (hub *Hub) Run() {
 	for {
 		select {
 		case client := <-hub.register:
+			log.Println("CLIENT REGISTERED")
 			hub.clients[client] = ""
 		case client := <-hub.unregister:
+			log.Println("CLIENT UNREGISTERED")
 			gameID := hub.clients[client]
 			if gameID != "" {
 				if handler := hub.games[gameID]; handler != nil {
@@ -91,6 +93,7 @@ func (hub *Hub) Run() {
 
 			data, err := json.Marshal(handler)
 			if err != nil {
+				log.Println(err)
 				return
 			}
 

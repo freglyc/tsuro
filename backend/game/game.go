@@ -6,9 +6,8 @@ import (
 
 // Game definition - the game itself
 type Game struct {
-	GameID    string    `json:"game_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	GameID    string    `json:"gameID"`
+	CreatedAt time.Time `json:"created"`
 	GameState
 	Options
 }
@@ -23,7 +22,6 @@ func NewGame(gameID string, options Options) *Game {
 	game := &Game{
 		GameID:    gameID,
 		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 		GameState: NewGameState(options),
 		Options:   options,
 	}
@@ -124,6 +122,8 @@ func (game *Game) UpdateTokens() {
 		// If a tile was placed where the player token can move then update
 		tile := game.Board[space[0]][space[1]]
 		if tile.Exists() {
+			// TODO update tile path fields as well
+
 			player.Token.Row = space[0]
 			player.Token.Col = space[1]
 			player.Token.Notch = tile.GetNotch(player.Token.Notch)

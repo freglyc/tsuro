@@ -6,8 +6,8 @@ import (
 )
 
 type GameHandler struct {
-	Clients map[*Client]bool // Holds mapping of clients subscribed to the game
 	Game    *tsuro.Game      // Game
+	Clients map[*Client]bool `json:"-"` // Holds mapping of clients subscribed to the game
 	Timer   *time.Timer      // Turn timer that may or may not be enabled
 	End     time.Time        // Timer end time
 }

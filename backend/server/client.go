@@ -40,13 +40,15 @@ func (client *Client) readPump() {
 		client.hub.unregister <- client
 		_ = client.conn.Close()
 	}()
+
 	client.conn.SetReadLimit(maxMessageSize)
 	_ = client.conn.SetReadDeadline(time.Now().Add(pongWait))
 	client.conn.SetPongHandler(func(string) error { _ = client.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		var msg Message
-		err := client.conn.ReadJSON(msg)
+		err := client.conn.ReadJSON(&msg)
 		if err != nil {
+			log.Println(err)
 			break
 		}
 		client.hub.broadcast <- ClientMessage{
