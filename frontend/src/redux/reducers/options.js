@@ -1,4 +1,4 @@
-import {SET_PLAYERS, TOGGLE_CHANGE, TOGGLE_TIMER} from "../actionTypes";
+import {SET_CHANGE, SET_PLAYERS, SET_TIMER} from "../actionTypes";
 
 const initialState = {
     players: 2,
@@ -10,10 +10,10 @@ export default function reducer(state = initialState, action) {
     switch (action.type) {
         case SET_PLAYERS:
             return { ...state, page: action.players }
-        case TOGGLE_TIMER:
-            return { ...state, timer: !state.timer }
-        case TOGGLE_CHANGE:
-            return { ...state, change: !state.change }
+        case SET_TIMER:
+            return { ...state, timer: action.timer }
+        case SET_CHANGE:
+            return { ...state, change: action.change }
         default:
             return state
     }

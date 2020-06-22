@@ -1,4 +1,4 @@
-import {TOGGLE_BLIND, TOGGLE_DARK} from "../actionTypes";
+import {SET_BLIND, SET_DARK} from "../actionTypes";
 
 const initialState = {
     dark: false,
@@ -7,10 +7,10 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case TOGGLE_DARK:
-            return { ...state, dark: !state.dark }
-        case TOGGLE_BLIND:
-            return { ...state, blind: !state.blind }
+        case SET_DARK:
+            return { ...state, dark: action.dark }
+        case SET_BLIND:
+            return { ...state, blind: action.blind }
         default:
             return state
     }

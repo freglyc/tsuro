@@ -1,13 +1,9 @@
 import {
-    SET_BOARD,
-    SET_GAMEID, SET_HAND,
+    SET_BLIND,
+    SET_BOARD, SET_CHANGE, SET_DARK,
+    SET_GAMEID, SET_HAND, SET_JOINED,
     SET_PAGE,
-    SET_PLAYERS, SET_STARTED, SET_TEAM, SET_TEAMS, SET_TIME, SET_TURN, SET_WINNER,
-    TOGGLE_BLIND,
-    TOGGLE_CHANGE,
-    TOGGLE_DARK,
-    TOGGLE_JOINED,
-    TOGGLE_TIMER
+    SET_PLAYERS, SET_STARTED, SET_TEAM, SET_TEAMS, SET_TIME, SET_TIMER, SET_TURN, SET_WINNER,
 } from "./actionTypes";
 
 // Options
@@ -15,19 +11,23 @@ export const setPlayers = (players) => ({
     type: SET_PLAYERS,
     players: players
 });
-export const toggleTimer = () => ({
-    type: TOGGLE_TIMER
+export const setTimer = (timer) => ({
+    type: SET_TIMER,
+    timer: timer
 });
-export const toggleChange = () => ({
-    type: TOGGLE_CHANGE
+export const setChange = (change) => ({
+    type: SET_CHANGE,
+    change: change
 });
 
 // Settings
-export const toggleDark = () => ({
-    type: TOGGLE_DARK
+export const setDark = (dark) => ({
+    type: SET_DARK,
+    dark: dark
 });
-export const toggleBlind = () => ({
-    type: TOGGLE_BLIND
+export const setBlind = (blind) => ({
+    type: SET_BLIND,
+    blind: blind
 });
 
 // Site
@@ -35,8 +35,9 @@ export const setPage = (page) => ({
     type: SET_PAGE,
     page: page
 });
-export const toggleJoined = () => ({
-    type: TOGGLE_JOINED
+export const setJoined = (joined) => ({
+    type: SET_JOINED,
+    joined: joined
 });
 export const setGameID = (gameID) => ({
     type: SET_GAMEID,

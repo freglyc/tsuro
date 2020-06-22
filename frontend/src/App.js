@@ -1,10 +1,8 @@
-// Connect4 App Page
-
 import * as React from "react";
 import GamePage from "./Game";
 import HomePage from "./Home";
 import SettingsPage, {Settings} from "./Settings";
-import {setGameID, setPage, toggleBlind, toggleDark, toggleJoined} from "./redux/actions";
+import {setBlind, setDark, setGameID, setJoined, setPage} from "./redux/actions";
 import RulesPage from "./Rules";
 import {WebSocketContext} from "./websocket/websocket";
 import {useContext, useEffect} from "react";
@@ -19,10 +17,10 @@ export default function App() {
   // Load settings
   let settings = Settings.load();
   if (settings.dark) {
-    dispatch(toggleDark())
+    dispatch(setDark(settings.dark))
     document.body.setAttribute('data-theme', 'dark');
   } else document.body.removeAttribute('data-theme')
-  if (settings.blind) dispatch(toggleBlind())
+  if (settings.blind) dispatch(setBlind(settings.blind))
 
   // Select page to render
   let render = <HomePage/>;
@@ -32,7 +30,6 @@ export default function App() {
 
   // Connect to game if url has gameID
   useEffect(() => {
-      // Set game if in one
       if (document.location.pathname !== "/") {
         const gameID = document.location.pathname.slice(1)
         dispatch(setGameID(gameID))
@@ -48,7 +45,7 @@ export default function App() {
           "time":-1
         };
         ws.sendMessage(data);
-        dispatch(toggleJoined())
+        dispatch(setJoined(true))
         dispatch(setPage("GAME"))
       }
   })
