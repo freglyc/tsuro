@@ -1,16 +1,37 @@
 import React, {useContext, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {WebSocketContext} from "./websocket/websocket";
-import {setChange, setGameID, setPage, setPlayers, setTimer} from "./redux/actions";
+import {setChange, setGameID, setJoined, setPage, setPlayers, setTimer} from "./redux/actions";
 
 export default function HomePage() {
     const [advanced, setAdvanced] = useState(false)
     const dispatch = useDispatch();
     const ws = useContext(WebSocketContext);
 
-    const gameID = useSelector(state => state.site.gameID);
+    let gameID = useSelector(state => state.site.gameID);
+    let players = useSelector(state => state.site.players);
     let timer = useSelector(state => state.options.timer);
     let change = useSelector(state => state.options.change);
+
+    function handleClick(e) {
+        e.preventDefault();
+        if (gameID.includes(" ") || gameID.length < 3) return
+        let data = {
+            "gameID": gameID,
+            "kind":"join",
+            "team":"Neutral",
+            "idx":-1,
+            "row":-1,
+            "col":-1,
+            "players": players,
+            "size":6,
+            "time": timer ? 20 : -1
+        };
+        ws.sendMessage(data);
+        dispatch(setJoined(true));
+        dispatch(setPage("GAME"));
+        window.history.pushState(null, '', '/' + gameID);
+    }
 
     return (
         <div className="flexbox flex-column flex-center full-height">
@@ -20,10 +41,10 @@ export default function HomePage() {
                     Play 2-8 player Tsuro against friends on one or more devices.
                     To create a game or join an existing one, enter a game ID and click 'Go'.
                 </p>
-                <form className="flexbox large-padding-top full-width" onSubmit={ console.log("TODO") }>
+                <form className="flexbox large-padding-top full-width" onSubmit={handleClick}>
                     <input className="input" autoFocus type="text" value={gameID}
                            onChange={(e) => dispatch(setGameID(e.target.value))}/>
-                    <button className="goBtn" onClick={ console.log("TODO") }>Go</button>
+                    <button className="goBtn" onClick={handleClick}>Go</button>
                 </form>
                 <div className="flexbox flex-self-end small-padding-top">
                     <div className="flexbox flex-center small-padding-right">
@@ -47,17 +68,17 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className="flexbox flex-self-end small-padding-top">
-                    <button onClick={(e) => {
+                    <button className="dark advanced pointer" onClick={(e) => {
                         e.preventDefault();
                         setAdvanced(!advanced);
-                    }}>advanced options</button>
+                    }}>{advanced ? "hide advanced options" : "show advanced options"}</button>
                 </div>
                 { advanced ?
                     <div className="full-width large-padding-top">
                         <div className="flexbox space-between full-width">
                             <div>
                                 <h2 className="standard-txt boldest-txt dark">TIMER</h2>
-                                <p className="small-txt gray">enable a 20 second timer</p>
+                                <p className="small-txt gray">enable a 20 second turn timer</p>
                             </div>
                             <label className="switch">
                                 <input type="checkbox" defaultChecked={timer} onChange={(e) => {
