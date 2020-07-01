@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {WebSocketContext} from "./websocket/websocket";
 import Tile from "./Tile";
+import {setPage} from "./redux/actions";
 
 export default function GamePage() {
     const dispatch = useDispatch();
@@ -48,6 +49,32 @@ export default function GamePage() {
                             }</div>
                         </div>
                     </div>
+
+                    <div className="flexbox space-between full-width small-padding-top">
+                        {
+                            // this.props.started && this.props.timer ?
+                                // <Timer time={this.props.time} currentTime={this.props.currentTime} turn={this.props.turn} winner={this.props.winner}/> :
+                                // this.props.timer ?
+                                //     <div className="standard-txt boldest-txt dark">time: {this.props.time}</div> :
+                                //     <div/>
+                            <div/>
+                        }
+                        <div className="flexbox flex-center">
+                            <div className="flexbox flex-center small-padding-right">
+                                <button className="fas fa-cog inverse gear" onClick={(e) => {
+                                    e.preventDefault();
+                                    dispatch(setPage("SETTINGS"));
+                                }}/>
+                            </div>
+                            <div className="flexbox flex-center">
+                                <button onClick={(e) => {
+                                    e.preventDefault();
+                                    // TODO send reset message
+                                }} className="resetBtn smallest-txt bolder-txt">new game</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

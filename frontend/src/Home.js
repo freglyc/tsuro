@@ -48,14 +48,14 @@ export default function HomePage() {
                 </form>
                 <div className="flexbox flex-self-end small-padding-top">
                     <div className="flexbox flex-center small-padding-right">
-                        <button className="fas fa-cog dark gear" onClick={(e) => {
+                        <button className="fas fa-cog inverse gear" onClick={(e) => {
                             e.preventDefault();
                             dispatch(setPage("SETTINGS"))
                         }}/>
                     </div>
                     <div className="flexbox flex-center">
                         <label className="small-padding-right standard-txt boldest-txt blue" htmlFor="players">PLAYERS</label>
-                        <select className="small-txt boldest-txt select" name="players" id="players"
+                        <select className="small-txt boldest-txt select inverse" name="players" id="players"
                                 onChange={(e) => {
                                         players = parseInt(e.target.value);
                                         dispatch(setPlayers(players))
@@ -71,7 +71,7 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className="flexbox flex-self-end small-padding-top">
-                    <button className="dark advanced pointer" onClick={(e) => {
+                    <button className="inverse advanced pointer" onClick={(e) => {
                         e.preventDefault();
                         setAdvanced(!advanced);
                     }}>{advanced ? "hide advanced options" : "show advanced options"}</button>
@@ -80,7 +80,7 @@ export default function HomePage() {
                     <div className="full-width large-padding-top">
                         <div className="flexbox space-between full-width">
                             <div>
-                                <h2 className="standard-txt boldest-txt dark">TIMER</h2>
+                                <h2 className="standard-txt boldest-txt inverse">TIMER</h2>
                                 <p className="small-txt gray">enable a 20 second turn timer</p>
                             </div>
                             <label className="switch">
@@ -94,7 +94,7 @@ export default function HomePage() {
                         </div>
                         <div className="flexbox space-between full-width medium-padding-top">
                             <div>
-                                <h2 className="standard-txt boldest-txt dark">TEAM CHANGE</h2>
+                                <h2 className="standard-txt boldest-txt inverse">TEAM CHANGE</h2>
                                 <p className="small-txt gray">allow players to changing teams after first selecting one</p>
                             </div>
                             <label className="switch">

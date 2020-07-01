@@ -63,6 +63,7 @@ func (hub *Hub) Run() {
 			handler := hub.games[clientMessage.GameID]
 			if handler == nil {
 				handler = NewHandler(tsuro.NewGame(clientMessage.GameID, clientMessage.Options))
+				hub.games[clientMessage.GameID] = handler
 			}
 			switch clientMessage.Kind {
 			case "join":

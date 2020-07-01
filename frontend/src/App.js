@@ -13,6 +13,7 @@ export default function App() {
   const ws = useContext(WebSocketContext);
 
   const page = useSelector(state => state.site.page);
+  const joined = useSelector(state => state.site.joined);
 
   // Load settings
   let settings = Settings.load();
@@ -30,7 +31,7 @@ export default function App() {
 
   // Connect to game if url has gameID
   useEffect(() => {
-      if (document.location.pathname !== "/") {
+      if (document.location.pathname !== "/" && !joined) {
         const gameID = document.location.pathname.slice(1)
         dispatch(setGameID(gameID))
         let data = {

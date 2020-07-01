@@ -13,6 +13,9 @@
   --black: black;
   --outline: #979797;
 
+  --lightest-gray: #EEEEEE;
+  --light-gray: #DDDDDD;
+
   --background: white;
   --inverse: #272727;
 }
@@ -74,7 +77,7 @@ input:focus {outline: var(--blue) dashed 0.1em;}
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--dark);
+  background-color: var(--inverse);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -338,7 +341,7 @@ input:checked + .slider:before {
 .exit:before {
   content: '\00d7';
   font-size: 40px;
-  color: var(--dark);
+  color: var(--inverse);
   font-weight: 900;
   font-family: Arial, sans-serif;
 }
@@ -365,7 +368,7 @@ input:checked + .slider:before {
 
 .select {
   border: 1px solid var(--gray);
-  color: var(--dark);
+  color: var(--inverse);
   background: var(--background);
   height: 2em;
 }
@@ -491,6 +494,7 @@ input:checked + .slider:before {
   outline-offset: -6px;
   background-image: url("./resources/dragon.png");
   background-size: cover;
+  background-color: var(--dark);
 }
 
 .empty {
