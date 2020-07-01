@@ -15,7 +15,7 @@ type GameState struct {
 }
 
 func NewGameState(options Options) GameState {
-	colors := [8]Team{Black, White, Red, Yellow, Blue, Green, Orange, Gray}
+	colors := [8]Team{Red, Yellow, Blue, Green, Orange, Purple, Pink, Turquoise}
 	// Init board
 	var board = make([][]Tile, options.Size)
 	for i := 0; i < options.Size; i++ {

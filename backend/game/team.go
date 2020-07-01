@@ -6,23 +6,19 @@ import "encoding/json"
 type Team int
 
 const (
-	Black Team = iota
-	White
-	Red
+	Red Team = iota
 	Blue
 	Green
 	Yellow
 	Orange
-	Gray
+	Purple
+	Pink
+	Turquoise
 	Neutral
 )
 
 func (team Team) String() string {
 	switch team {
-	case Black:
-		return "Black"
-	case White:
-		return "White"
 	case Red:
 		return "Red"
 	case Blue:
@@ -33,8 +29,12 @@ func (team Team) String() string {
 		return "Yellow"
 	case Orange:
 		return "Orange"
-	case Gray:
-		return "Gray"
+	case Purple:
+		return "Purple"
+	case Pink:
+		return "Pink"
+	case Turquoise:
+		return "Turquoise"
 	default:
 		return "Neutral"
 	}
@@ -46,10 +46,6 @@ func (team *Team) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	switch s {
-	case "Black":
-		*team = Black
-	case "White":
-		*team = White
 	case "Red":
 		*team = Red
 	case "Blue":
@@ -60,8 +56,12 @@ func (team *Team) UnmarshalJSON(b []byte) error {
 		*team = Yellow
 	case "Orange":
 		*team = Orange
-	case "Gray":
-		*team = Gray
+	case "Purple":
+		*team = Purple
+	case "Pink":
+		*team = Pink
+	case "Turquoise":
+		*team = Turquoise
 	default:
 		*team = Neutral
 	}

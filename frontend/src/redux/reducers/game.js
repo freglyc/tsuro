@@ -13,7 +13,7 @@ const initialState = {
     teams: {},
     board: [],
     turn: "Neutral",
-    winner: "Neutral",
+    winner: [],
     hand: [],
     started: false,
     time: -1

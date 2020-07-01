@@ -9,7 +9,7 @@ export default function HomePage() {
     const ws = useContext(WebSocketContext);
 
     let gameID = useSelector(state => state.site.gameID);
-    let players = useSelector(state => state.site.players);
+    let players = useSelector(state => state.options.players);
     let timer = useSelector(state => state.options.timer);
     let change = useSelector(state => state.options.change);
 
@@ -56,7 +56,10 @@ export default function HomePage() {
                     <div className="flexbox flex-center">
                         <label className="small-padding-right standard-txt boldest-txt blue" htmlFor="players">PLAYERS</label>
                         <select className="small-txt boldest-txt select" name="players" id="players"
-                                onChange={(e) => dispatch(setPlayers(parseInt(e.target.value)))}>
+                                onChange={(e) => {
+                                        players = parseInt(e.target.value);
+                                        dispatch(setPlayers(players))
+                                }}>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="3">4</option>

@@ -4,17 +4,23 @@
   --yellow: #F9EA36;
   --green: #24D650;
   --orange: #FA9D33;
+  --purple: #C564EF;
+  --pink: #FF4FB1;
+  --turquoise: #44D7B6;
+
   --gray: #6D7278;
+  --dark: #272727;
   --black: black;
-  --purple: #EF64D2;
+  --outline: #979797;
 
   --background: white;
-  --dark: #272727;
+  --inverse: #272727;
 }
 [data-theme="dark"] {
   --background: #272727;
+  --inverse: white;
+
   --gray: white;
-  --dark: white;
   --lightest-gray: white;
   --light-gray: white;
   --black: white;
@@ -39,6 +45,14 @@ select:focus {outline:0;}
 button:focus {outline:0;}
 
 input:focus {outline: var(--blue) dashed 0.1em;}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
 
 .switch {
   position: relative;
@@ -83,7 +97,7 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px var(--blue);
 }
 
 input:checked + .slider:before {
@@ -151,6 +165,10 @@ input:checked + .slider:before {
   padding: 10px;
 }
 
+.smallest-margin-top {
+  margin-top: 5px;
+}
+
 .small-margin-top {
   margin-top: 10px;
 }
@@ -161,6 +179,10 @@ input:checked + .slider:before {
 
 .medium-padding-top {
   padding-top: 20px;
+}
+
+.medium-padding {
+  padding: 20px;
 }
 
 .large-padding-top{
@@ -211,6 +233,22 @@ input:checked + .slider:before {
   color: var(--green);
 }
 
+.orange {
+  color: var(--orange);
+}
+
+.purple {
+  color: var(--purple);
+}
+
+.pink {
+  color: var(--pink);
+}
+
+.turquoise {
+  color: var(--turquoise);
+}
+
 .none {
   color: var(--dark);
 }
@@ -225,6 +263,10 @@ input:checked + .slider:before {
 
 .dark {
   color: var(--dark);
+}
+
+.inverse {
+  color: var(--inverse);
 }
 
 .flexbox {
@@ -272,7 +314,7 @@ input:checked + .slider:before {
 }
 
 .game-width {
-  width: 40%;
+  width: 37%;
 }
 
 
@@ -444,20 +486,25 @@ input:checked + .slider:before {
   border: 3px solid var(--dark);
 }
 
-.tile {
-  cursor: pointer;
-  width: 100%;
-  height: calc(10vw * 0.55);
-  border: none;
-  background: var(--blue);
-  padding: 0;
+.board {
+  outline: black solid 6px;
+  outline-offset: -6px;
+  background-image: url("./resources/dragon.png");
+  background-size: cover;
 }
 
-.tile div {
-  margin: 0 auto;
-  width: 90%;
-  height: 90%;
-  border-radius: 100%;
+.empty {
+  width: 100%;
+  height: calc(10vw * 0.57);
+  border: none;
+  background: none;
+  padding: 0;
+  outline: var(--outline) solid 1px;
+}
+
+.tile {
+  width: 100%;
+  height: 100%;
 }
 
 .neutral-background {
@@ -478,6 +525,14 @@ input:checked + .slider:before {
 
 .green-background {
   background: var(--green);
+}
+
+.black-background {
+  background: black;
+}
+
+.dark-background {
+  background: var(--dark);
 }
 
 .resetBtn {
