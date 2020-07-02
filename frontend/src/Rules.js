@@ -16,7 +16,7 @@ export default function RulesPage() {
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>Tsuro</a></h1>
                     <h1 className="small-txt boldest-txt flex-self-end dark">RULES</h1>
                 </div>
-                <div className="flexbox flex-column flex-self-start large-padding-top dark standard-txt">
+                <div className="flexbox flex-column flex-self-start large-padding-top inverse standard-txt">
                     <div>
                         Tsuro is a 2-8 player board game where players place tiles on the board to build paths beginning
                         at the edges and travel around the interior. The goal of the game is to keep your path from
@@ -29,9 +29,12 @@ export default function RulesPage() {
                         <span className="boldest-txt">ROTATING A TILE:</span> At any time you may rotate the tiles in your hand by clicking them.
                     </div>
                     <div className="small-padding-top">
-                        <span className="boldest-txt">PLACING A TILE:</span> On your turn place a tile by dragging and dropping your chosen tile onto the highlighted space on the board.
+                        <span className="boldest-txt">PLACING A TILE:</span> On your turn place a tile by dragging and dropping one from your hand onto the space that is directly adjacent to your token.
                     </div>
                 </div>
+            </div>
+            <div className="absolute bottom">
+                <p className="small-txt lighter-txt gray">Keep the developer <a target="_blank" rel="noopener noreferrer" className="gray" href="https://www.buymeacoffee.com/cfregly">caffeinated</a></p>
             </div>
         </div>
     )

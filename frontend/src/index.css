@@ -57,6 +57,10 @@ input:focus {outline: var(--blue) dashed 0.1em;}
   position: relative;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .switch {
   position: relative;
   display: inline-block;
@@ -196,6 +200,18 @@ input:checked + .slider:before {
   padding-top: 60px;
 }
 
+.smallest-padding-left {
+  padding-left: 5px;
+}
+
+.small-padding-left {
+  padding-left: 10px;
+}
+
+.smallest-padding-right {
+  padding-right: 5px;
+}
+
 .small-padding-right {
   padding-right: 10px;
 }
@@ -271,6 +287,89 @@ input:checked + .slider:before {
 .inverse {
   color: var(--inverse);
 }
+
+
+.neutral-background {
+  background: var(--background);
+}
+
+.blue-background {
+  background: var(--blue);
+}
+
+.red-background {
+  background: var(--red);
+}
+
+.yellow-background {
+  background: var(--yellow);
+}
+
+.green-background {
+  background: var(--green);
+}
+
+.orange-background {
+  background: var(--orange);
+}
+
+.purple-background {
+  background: var(--purple);
+}
+
+.pink-background {
+  background: var(--pink);
+}
+
+.turquoise-background {
+  background: var(--turquoise);
+}
+
+.black-background {
+  background: black;
+}
+
+.dark-background {
+  background: var(--dark);
+}
+
+.red-border {
+  border: var(--red) solid 3px;
+}
+
+.yellow-border {
+  border: var(--yellow) solid 3px;
+}
+
+.green-border {
+  border: var(--green) solid 3px;
+}
+
+.blue-border {
+  border: var(--blue) solid 3px;
+}
+
+.orange-border {
+  border: var(--orange) solid 3px;
+}
+
+.purple-border {
+  border: var(--purple) solid 3px;
+}
+
+.pink-border {
+  border: var(--pink) solid 3px;
+}
+
+.turquoise-border {
+  border: var(--turquoise) solid 3px;
+}
+
+
+
+
+
+
 
 .flexbox {
   display: flex;
@@ -388,105 +487,27 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
+.hand {
+  position: relative;
+  top: 4.4em;
+  max-height: 25em;
+}
+
 /* COLOR CHANGE RADIO */
-.color-input input[type=radio] {
-  opacity: 0;
-  width: 0;
-  position: absolute;
+.team-btns {
+  position: relative;
+  top: 4.4em;
+  max-height: 25em;
 }
 
-.color-input label {
-  cursor: pointer;
-  display: inline-block;
-  padding: 5px;
-  text-align: center;
-  width: 80px;
-  height: 20px;
+.team-btn {
+  border-radius: 10em;
+  width: 1.5em;
+  height: 1.5em;
 }
 
-.red-input-background input[type="radio"]:checked + label {
-  color: white;
-  background-color: var(--red);
-}
-
-.yellow-input-background input[type="radio"]:checked + label {
-  color: white;
-  background-color: var(--yellow);
-}
-
-.green-input-background input[type="radio"]:checked + label {
-  color: white;
-  background-color: var(--green);
-}
-
-.blue-input-background input[type="radio"]:checked + label {
-  color: white;
-  background-color: var(--blue);
-}
-
-.red-border label{
-  border: 2px solid var(--red);
-}
-
-.red-blind-border label {
-  border: 3px dashed var(--red);
-}
-
-.red-blind-border input[type="radio"]:checked + label {
-  border-color: var(--dark);
-}
-
-.green-border label{
-  border: 2px solid var(--green);
-}
-
-.green-blind-border label {
-  border: 3px inset var(--green);
-}
-
-.green-blind-border input[type="radio"]:checked + label {
-  border-color: var(--dark);
-}
-
-.blue-border label{
-  border: 2px solid var(--blue);
-}
-
-.blue-blind-border label {
-  border: 3px solid var(--dark);
-}
-
-.blue-blind-border input[type="radio"]:checked + label {
-  border-color: var(--dark);
-}
-
-
-.yellow-border label{
-  border: 2px solid var(--yellow);
-}
-
-.yellow-blind-border label {
-  border: 3px double var(--yellow);
-}
-
-.yellow-blind-border input[type="radio"]:checked + label {
-  border-color: var(--dark);
-}
-
-.red-tile-blind-border {
-  border: 3px dashed var(--dark);
-}
-
-.yellow-tile-blind-border {
-  border: 3px double var(--dark);
-}
-
-.green-tile-blind-border {
-  border: 3px inset var(--dark);
-}
-
-.blue-tile-blind-border {
-  border: 3px solid var(--dark);
+.hide-overflow {
+  overflow: hidden;
 }
 
 .board {
@@ -498,8 +519,9 @@ input:checked + .slider:before {
 }
 
 .empty {
-  width: 100%;
+  width: calc(10vw * 0.57);
   height: calc(10vw * 0.57);
+  /*width: 100%;*/
   border: none;
   background: none;
   padding: 0;
@@ -509,34 +531,6 @@ input:checked + .slider:before {
 .tile {
   width: 100%;
   height: 100%;
-}
-
-.neutral-background {
-  background: var(--background);
-}
-
-.blue-background {
-  background: var(--blue);
-}
-
-.red-background {
-  background: var(--red);
-}
-
-.yellow-background {
-  background: var(--yellow);
-}
-
-.green-background {
-  background: var(--green);
-}
-
-.black-background {
-  background: black;
-}
-
-.dark-background {
-  background: var(--dark);
 }
 
 .resetBtn {

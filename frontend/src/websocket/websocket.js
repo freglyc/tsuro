@@ -13,6 +13,7 @@ export default ({ children }) => {
 
     const dispatch = useDispatch();
     const sendMessage = (msg) => {
+        console.log(msg);
         setTimeout(() => {
             socket.send(JSON.stringify(msg))
         }, 250)

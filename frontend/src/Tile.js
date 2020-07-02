@@ -6,8 +6,10 @@ import Notch from "./Notch";
 export default function Tile(props) {
 
     // TESTS
-    // const edges = [["A", "B"], ["C", "D"], ["E", "F"], ["G", "H"]];
+    // const edges = [["A", "C"], ["B", "D"], ["E", "F"], ["G", "H"]];
     // const paths = {"Red": ["A", "B"]};
+
+    // const edges = [["C", "E"], ["D", "H"], ["F", "B"], ["G", "A"]]
 
     const edges = props.edges;
     const paths = props.paths;
@@ -15,11 +17,11 @@ export default function Tile(props) {
     const col = props.col;
     const teams = useSelector(state => state.game.teams);
 
-    let notch = null;
+    let notches = [];
     for (let i = 0; i < teams.length; i++) {
         let team = teams[i];
         if (team.token.row === row && team.token.col === col) {
-            notch = <Notch notch={team.token.notch} color={getColor(team.color)}/>
+            notches.push(<Notch key={team.color + "notch"} notch={team.token.notch} color={getColor(team.color)}/>);
         }
     }
 
@@ -30,14 +32,18 @@ export default function Tile(props) {
                     let color = "#979797";
                     if (paths) {
                         for (const [key, val] of Object.entries(paths)) {
-                            if (JSON.stringify(edge) === JSON.stringify(val)) {
-                                color = getColor(key);
+                            for (let i = 0; i < val.length; i ++) {
+                                let e = val[i]
+                                if ((edge[0] === e[0] && edge[1] === e[1]) ||
+                                    (edge[1] === e[0] && edge[0] === e[1])) {
+                                    color = getColor(key);
+                                }
                             }
                         }
                     }
-                    return <Edge edge={edge} color={color}/>
+                    return <Edge key={row + "," + col + edge} edge={edge} color={color}/>
                 }) : null }
-                {notch}
+                {notches.map(n => n)}
             </svg>
         </div>
     )

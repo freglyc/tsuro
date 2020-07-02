@@ -10,7 +10,7 @@ import {
 
 const initialState = {
     team: "Neutral",
-    teams: {},
+    teams: [],
     board: [],
     turn: "Neutral",
     winner: [],

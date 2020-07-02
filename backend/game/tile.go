@@ -2,8 +2,8 @@ package tsuro
 
 // Tile definition - the tiles added to the board
 type Tile struct {
-	Edges [][]Notch        `json:"edges"` // edges that define a tile
-	Paths map[Team][]Notch `json:"paths"` // defines section of team path that runs through the tile
+	Edges [][]Notch            `json:"edges"` // edges that define a tile
+	Paths map[string][][]Notch `json:"paths"` // defines section of team path that runs through the tile
 }
 
 // Given an notch, get the resulting notch from moving through the tile.

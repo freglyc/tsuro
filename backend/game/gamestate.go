@@ -1,6 +1,8 @@
 package tsuro
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 // GameState definition - the state of the game at a given point in time
 type GameState struct {
@@ -31,6 +33,7 @@ func NewGameState(options Options) GameState {
 		teams[i].Hand.Add(deck.Draw())
 		teams[i].Hand.Add(deck.Draw())
 		teams[i].Hand.Add(deck.Draw())
+
 		// get a random token not in use
 		token := RandomToken(options.Size)
 		for contains(teams, token) {
@@ -38,6 +41,7 @@ func NewGameState(options Options) GameState {
 		}
 		teams[i].Token = token
 		teams[i].Dragon = false
+		teams[i].Plays = 0
 	}
 	state := GameState{
 		Board:  board,
