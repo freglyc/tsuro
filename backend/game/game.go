@@ -81,15 +81,7 @@ func (game *Game) GetNumTileOnBoard() int {
 func (game *Game) GetSpace(team Team) []int {
 	player := game.Teams[game.GetPlayer(team)]
 	var space []int
-	// If first turn of the game then return current space
-	if game.GetNumTileOnBoard() <= game.Options.Players &&
-		((player.Token.Row == 0 && (player.Token.Notch == A || player.Token.Notch == B)) ||
-			(player.Token.Row == game.Options.Size-1 && (player.Token.Notch == E || player.Token.Notch == F)) ||
-			(player.Token.Col == 0 && (player.Token.Notch == G || player.Token.Notch == H)) ||
-			(player.Token.Col == game.Options.Size-1 && (player.Token.Notch == C || player.Token.Notch == D))) {
-		return []int{player.Token.Row, player.Token.Col}
-	}
-	// Otherwise return next space to go to
+	// Return next space to go to
 	switch player.Token.Notch {
 	case A, B:
 		space = []int{player.Token.Row - 1, player.Token.Col}
@@ -122,61 +114,77 @@ func (game *Game) UpdateTokens() {
 
 	notchMap := map[Notch]Notch{A: F, B: E, C: H, D: G, E: B, F: A, G: D, H: C}
 
+	// Update first time placed token
+	currentPlayer := game.Teams[game.GetPlayer(game.Turn)]
+	if currentPlayer.Plays == 1 && game.GetNumTileOnBoard() <= game.Options.Players {
+		tile := game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col]
+		before := currentPlayer.Token.Notch
+		after := tile.GetNotch(before)
+		// Update paths
+		if game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths == nil {
+			game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths = map[string][][]Notch{}
+		}
+		if len(game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths[currentPlayer.Color.String()]) == 0 {
+			game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths[currentPlayer.Color.String()] = [][]Notch{{before, after}}
+		} else {
+			game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths[currentPlayer.Color.String()] = append(game.Board[currentPlayer.Token.Row][currentPlayer.Token.Col].Paths[currentPlayer.Color.String()], []Notch{before, after})
+		}
+		game.Teams[game.GetPlayer(game.Turn)].Token.Notch = after
+	}
+
+	// Update all normal paths
 	for i := 0; i < len(game.Teams); i++ {
 		player := game.Teams[i]
-		flag := false
-		count := 0
-		for {
-			if flag {
-				break
-			}
-			space := game.GetSpace(player.Color)
-			// if out of bounds return
-			if len(space) == 0 || space[0] >= game.Options.Size || space[0] < 0 || space[1] >= game.Options.Size || space[1] < 0 {
-				break
-			}
-			// If a tile was placed where the player token can move then update
-			tile := game.Board[space[0]][space[1]]
-			if tile.Exists() {
-				// Update tile path
-				var before Notch
-				if (player.Plays == 0 || player.Plays == 1) && player.Color == game.Turn && count == 0 {
-					flag = true
-					before = player.Token.Notch
-				} else {
-					before = notchMap[player.Token.Notch]
+		if player.Plays > 0 {
+			for {
+				space := game.GetSpace(player.Color)
+				if len(space) == 0 || space[0] >= game.Options.Size || space[0] < 0 || space[1] >= game.Options.Size || space[1] < 0 {
+					break
 				}
-				after := tile.GetNotch(before)
-				if game.Board[space[0]][space[1]].Paths == nil {
-					game.Board[space[0]][space[1]].Paths = map[string][][]Notch{}
-				}
-				if len(game.Board[space[0]][space[1]].Paths[player.Color.String()]) == 0 {
-					game.Board[space[0]][space[1]].Paths[player.Color.String()] = [][]Notch{{before, after}}
-				} else {
-					game.Board[space[0]][space[1]].Paths[player.Color.String()] = append(game.Board[space[0]][space[1]].Paths[player.Color.String()], []Notch{before, after})
-				}
-
-				// Update token
-				game.Teams[i].Token.Row = space[0]
-				game.Teams[i].Token.Col = space[1]
-				game.Teams[i].Token.Notch = after
-
-				// If collide with other player both lose
-				for i := 0; i < len(game.Teams)-1; i++ {
-					p1 := game.Teams[i]
-					for j := i + 1; j < len(game.Teams); j++ {
-						p2 := game.Teams[j]
-						if p1.Token.Row == p2.Token.Row && p1.Token.Col == p2.Token.Col {
-							if p1.Token.Notch == p2.Token.Notch || game.Board[p1.Token.Row][p2.Token.Col].GetNotch(p1.Token.Notch) == p2.Token.Notch {
-								flag = true
+				tile := game.Board[space[0]][space[1]]
+				if tile.Exists() {
+					// If collided break out of this teams update
+					flag := false
+					for x := 0; x < len(game.Teams)-1; x++ {
+						p1 := game.Teams[x]
+						for y := x + 1; y < len(game.Teams); y++ {
+							p2 := game.Teams[y]
+							// If same tile
+							if p1.Token.Row == p2.Token.Row && p1.Token.Col == p2.Token.Col &&
+								p1.Token.Row < game.Options.Size-1 && p1.Token.Row >= 0 &&
+								p1.Token.Col < game.Options.Size-1 && p1.Token.Col >= 0 {
+								collisionTile := game.Board[p1.Token.Row][p1.Token.Col]
+								if collisionTile.GetNotch(p1.Token.Notch) == p2.Token.Notch {
+									flag = true
+									p1.Token.lost()
+									p2.Token.lost()
+								}
 							}
 						}
 					}
+					if flag {
+						break
+					}
+
+					before := notchMap[player.Token.Notch]
+					after := tile.GetNotch(before)
+					// Update paths
+					if game.Board[space[0]][space[1]].Paths == nil {
+						game.Board[space[0]][space[1]].Paths = map[string][][]Notch{}
+					}
+					if len(game.Board[space[0]][space[1]].Paths[player.Color.String()]) == 0 {
+						game.Board[space[0]][space[1]].Paths[player.Color.String()] = [][]Notch{{before, after}}
+					} else {
+						game.Board[space[0]][space[1]].Paths[player.Color.String()] = append(game.Board[space[0]][space[1]].Paths[player.Color.String()], []Notch{before, after})
+					}
+					// Update token
+					game.Teams[i].Token.Row = space[0]
+					game.Teams[i].Token.Col = space[1]
+					game.Teams[i].Token.Notch = after
+				} else {
+					break
 				}
-			} else {
-				break
 			}
-			count += 1
 		}
 	}
 }
@@ -184,8 +192,8 @@ func (game *Game) UpdateTokens() {
 // Update winner
 func (game *Game) UpdateWinner() {
 	var alive []Team
+	var dead []Team
 	for _, player := range game.Teams {
-		// TODO add collision here
 		// If lost then update token
 		if player.Plays > 0 {
 			switch player.Token.Notch {
@@ -210,7 +218,17 @@ func (game *Game) UpdateWinner() {
 		// If player still in the game
 		if player.Token.Notch != None {
 			alive = append(alive, player.Color)
+		} else {
+			dead = append(dead, player.Color)
 		}
+	}
+	for i := 0; i < len(dead); i++ {
+		p := game.Teams[game.GetPlayer(dead[i])]
+		// Add back tiles of dead players to hand
+		for i := 0; i < len(p.Hand.Tiles); i++ {
+			game.Deck.Add(p.Hand.Tiles[i])
+		}
+		game.Teams[game.GetPlayer(dead[i])].Hand.RemoveAll()
 	}
 	if len(alive) == 0 {
 		game.Winner = []Team{Neutral}
@@ -235,6 +253,11 @@ func (game *Game) UpdateHands(turn Team) {
 		active.Dragon = false
 	} else {
 		active = game.Teams[game.GetPlayer(turn)]
+		// Update active if dead
+		for active.Token.Notch == None {
+			turn = game.GetNextTurn(turn)
+			active = game.Teams[game.GetPlayer(turn)]
+		}
 	}
 
 	if len(game.Deck.Tiles) > 0 {
@@ -310,7 +333,8 @@ func (game *Game) Place(space []int, team Team, idx int) {
 	player := game.Teams[game.GetPlayer(team)]
 	if game.Turn == team && // team turn
 		idx < len(player.Hand.Tiles) && // the index is in the hands bounds
-		check[0] == space[0] && check[1] == space[1] && // adjacent to team token
+		((player.Plays == 0 && space[0] == player.Token.Row && space[1] == player.Token.Col) ||
+			(player.Plays != 0 && check[0] == space[0] && check[1] == space[1])) && // adjacent to team token
 		!game.Board[space[0]][space[1]].Exists() { // there in no tile in the space
 
 		game.Board[space[0]][space[1]] = player.Hand.Tiles[idx] // add to board

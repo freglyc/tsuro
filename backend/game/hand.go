@@ -20,3 +20,7 @@ func (hand *Hand) Remove(idx int) {
 		hand.Tiles = append(hand.Tiles[:idx], hand.Tiles[idx+1:]...)
 	}
 }
+
+func (hand *Hand) RemoveAll() {
+	hand.Tiles = []Tile{}
+}

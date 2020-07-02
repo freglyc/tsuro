@@ -60,6 +60,7 @@ func (hub *Hub) Run() {
 			delete(hub.clients, client)
 			close(client.send)
 		case clientMessage := <-hub.broadcast:
+			log.Println(clientMessage)
 			handler := hub.games[clientMessage.GameID]
 			if handler == nil {
 				handler = NewHandler(tsuro.NewGame(clientMessage.GameID, clientMessage.Options))
