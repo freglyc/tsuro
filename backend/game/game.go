@@ -112,9 +112,7 @@ func (game *Game) GetNextTurn(team Team) Team {
 
 // Update the tokens and tile path segments
 func (game *Game) UpdateTokens() {
-
 	notchMap := map[Notch]Notch{A: F, B: E, C: H, D: G, E: B, F: A, G: D, H: C}
-
 	// Update first time placed token
 	currentPlayer := game.Teams[game.GetPlayer(game.Turn)]
 	if currentPlayer.Plays == 1 && game.GetNumTileOnBoard() <= game.Options.Players {
@@ -132,11 +130,10 @@ func (game *Game) UpdateTokens() {
 		}
 		game.Teams[game.GetPlayer(game.Turn)].Token.Notch = after
 	}
-
 	// Update all normal paths
 	for i := 0; i < len(game.Teams); i++ {
 		player := game.Teams[i]
-		if player.Plays > 0 {
+		if player.Plays > 0 && player.Token.Notch != None {
 			for {
 				space := game.GetSpace(player.Color)
 				if len(space) == 0 || space[0] >= game.Options.Size || space[0] < 0 || space[1] >= game.Options.Size || space[1] < 0 {
@@ -168,7 +165,6 @@ func (game *Game) UpdateTokens() {
 					if flag {
 						break
 					}
-
 					before := notchMap[player.Token.Notch]
 					after := tile.GetNotch(before)
 					// Update paths
@@ -266,7 +262,6 @@ func (game *Game) UpdateHands(turn Team) {
 			active = game.Teams[game.GetPlayer(turn)]
 		}
 	}
-
 	if len(game.Deck.Tiles) > 0 {
 		// Add tile to team hand if needed
 		if len(active.Hand.Tiles) < 3 {

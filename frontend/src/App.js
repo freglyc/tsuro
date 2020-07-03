@@ -1,5 +1,5 @@
 import * as React from "react";
-import GamePage from "./Game";
+import GamePage from "./gamepage/Game";
 import HomePage from "./Home";
 import SettingsPage, {Settings} from "./Settings";
 import {setBlind, setDark, setGameID, setJoined, setPage} from "./redux/actions";
@@ -11,7 +11,6 @@ import {useDispatch, useSelector} from "react-redux";
 export default function App() {
   const dispatch = useDispatch();
   const ws = useContext(WebSocketContext);
-
   const page = useSelector(state => state.site.page);
   const joined = useSelector(state => state.site.joined);
   const change = useSelector(state => state.options.change);
@@ -35,23 +34,12 @@ export default function App() {
       if (document.location.pathname !== "/" && !joined) {
         const gameID = document.location.pathname.slice(1)
         dispatch(setGameID(gameID))
-        let data = {
-          "gameID": gameID,
-          "kind":"join",
-          "team":"Neutral",
-          "idx":-1,
-          "row":-1,
-          "col":-1,
-          "players":2,
-          "size":6,
-          "time":-1,
-          "change": change
-        };
+        let data = { "gameID": gameID, "kind":"join", "team":"Neutral", "idx":-1, "row":-1, "col":-1,
+          "players":2, "size":6, "time":-1, "change": change };
         ws.sendMessage(data);
         dispatch(setJoined(true))
         dispatch(setPage("GAME"))
       }
   })
-
   return (<div> { render } </div>)
 }

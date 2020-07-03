@@ -7,7 +7,6 @@ export default function HomePage() {
     const [advanced, setAdvanced] = useState(false)
     const dispatch = useDispatch();
     const ws = useContext(WebSocketContext);
-
     let gameID = useSelector(state => state.site.gameID);
     let players = useSelector(state => state.options.players);
     let timer = useSelector(state => state.options.timer);
@@ -16,24 +15,13 @@ export default function HomePage() {
     function handleClick(e) {
         e.preventDefault();
         if (gameID.includes(" ") || gameID.length < 3) return
-        let data = {
-            "gameID": gameID,
-            "kind":"join",
-            "team":"Neutral",
-            "idx":-1,
-            "row":-1,
-            "col":-1,
-            "players": players,
-            "size":6,
-            "time": timer ? 20 : -1,
-            "change": change
-        };
+        let data = { "gameID": gameID, "kind":"join", "team":"Neutral", "idx":-1, "row":-1, "col":-1,
+            "players": players, "size":6, "time": timer ? 20 : -1, "change": change };
         ws.sendMessage(data);
         dispatch(setJoined(true));
         dispatch(setPage("GAME"));
         window.history.pushState(null, '', '/' + gameID);
     }
-
     return (
         <div className="flexbox flex-column flex-center full-height">
             <div className="flexbox flex-column flex-center half-width">

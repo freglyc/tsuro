@@ -2,21 +2,12 @@ import React from "react";
 import Edge from "./Edge";
 import {useSelector} from "react-redux";
 import Notch from "./Notch";
+import {ItemTypes} from "./ItemTypes";
+import {useDrag} from "react-dnd";
 
-export default function Tile(props) {
-
-    // TESTS
-    // const edges = [["A", "C"], ["B", "D"], ["E", "F"], ["G", "H"]];
-    // const paths = {"Red": ["A", "B"]};
-
-    // const edges = [["C", "E"], ["D", "H"], ["F", "B"], ["G", "A"]]
-
-    const edges = props.edges;
-    const paths = props.paths;
-    const row = props.row;
-    const col = props.col;
+export default function Tile({ edges, paths, row, col, idx }) {
+    const [{}, drag] = useDrag({ item: { type: ItemTypes.TILE, idx: idx } })
     const teams = useSelector(state => state.game.teams);
-
     let notches = [];
     for (let i = 0; i < teams.length; i++) {
         let team = teams[i];
@@ -24,9 +15,8 @@ export default function Tile(props) {
             notches.push(<Notch key={team.color + "notch"} notch={team.token.notch} color={getColor(team.color)}/>);
         }
     }
-
     return (
-        <div className={edges !== null ? "dark-background" : ""}>
+        <div ref={drag} className={edges !== null ? "dark-background" : ""}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 75">
                 {edges ? edges.map(edge => {
                     let color = "#979797";
