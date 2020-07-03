@@ -575,8 +575,14 @@ input:checked + .slider:before {
 }
 
 @media(max-width: 425px) {
+  .half-width {
+    width: 80%;
+  }
   .lighter-txt {
     font-weight: normal;
+  }
+  .smallest-padding-right {
+    padding-right: 1px;
   }
   .small-padding-right {
     padding-right: 2px;
@@ -586,5 +592,11 @@ input:checked + .slider:before {
   }
   .goBtn {
     width: 30%;
+  }
+  html {
+    max-width: 100%;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 }
