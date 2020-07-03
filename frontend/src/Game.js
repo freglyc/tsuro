@@ -78,7 +78,7 @@ export default function GamePage() {
 
                         <div className="flexbox flex-column">
                             <p className={turnColor + " standard-txt boldest-txt flex-self-end"}>{
-                                winner.length !== 0 ? winner.map(w => w.toLowerCase() + " ") + "wins!" : turn.toLowerCase() + " turn"
+                                winner.length !== 0 ? winner.map(w => w.toLowerCase()) + " wins!" : turn.toLowerCase() + " turn"
                             }</p>
                         </div>
 

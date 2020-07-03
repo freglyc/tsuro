@@ -10,6 +10,7 @@ type GameState struct {
 	Deck   Deck     `json:"deck"`   // list of tiles in deck
 	Teams  []Player `json:"teams"`  // list of players in game
 	Turn   Team     `json:"turn"`   // current team turn
+	Losers []Team   `json:"losers"` // losers in order of lose
 	Winner []Team   `json:"winner"` // winning team
 
 	Started   bool `json:"started"`   // whether or not the game has started
@@ -48,6 +49,7 @@ func NewGameState(options Options) GameState {
 		Deck:   deck,
 		Teams:  teams,
 		Turn:   teams[rand.Intn(options.Players)].Color,
+		Losers: []Team{},
 		Winner: []Team{},
 
 		Started:   false,

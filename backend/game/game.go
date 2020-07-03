@@ -156,6 +156,8 @@ func (game *Game) UpdateTokens() {
 								collisionTile := game.Board[p1.Token.Row][p1.Token.Col]
 								if collisionTile.GetNotch(p1.Token.Notch) == p2.Token.Notch {
 									flag = true
+									game.Losers = append(game.Losers, p1.Color)
+									game.Losers = append(game.Losers, p2.Color)
 									p1.Token.lost()
 									p2.Token.lost()
 								}
@@ -199,18 +201,22 @@ func (game *Game) UpdateWinner() {
 			switch player.Token.Notch {
 			case A, B:
 				if player.Token.Row == 0 {
+					game.Losers = append(game.Losers, player.Color)
 					player.Token.lost()
 				}
 			case C, D:
 				if player.Token.Col == game.Options.Size-1 {
+					game.Losers = append(game.Losers, player.Color)
 					player.Token.lost()
 				}
 			case E, F:
 				if player.Token.Row == game.Options.Size-1 {
+					game.Losers = append(game.Losers, player.Color)
 					player.Token.lost()
 				}
 			case G, H:
 				if player.Token.Col == 0 {
+					game.Losers = append(game.Losers, player.Color)
 					player.Token.lost()
 				}
 			}
@@ -231,7 +237,7 @@ func (game *Game) UpdateWinner() {
 		game.Teams[game.GetPlayer(dead[i])].Hand.RemoveAll()
 	}
 	if len(alive) == 0 {
-		game.Winner = []Team{Neutral}
+		game.Winner = []Team{game.Losers[len(game.Losers)-1], game.Losers[len(game.Losers)-2]}
 		return
 	}
 	if len(alive) == 1 || game.GetNumTileOnBoard() >= 35 {
