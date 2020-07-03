@@ -18,6 +18,7 @@ export const SET_WINNER = "SET_WINNER";
 export const SET_HAND = "SET_HAND";
 export const SET_STARTED = "SET_STARTED";
 export const SET_TIME = "SET_TIME";
+export const SET_COUNTDOWN = "SET_COUNTDOWN";
 
 // Settings reducer types
 export const SET_DARK = "TOGGLE_DARKMODE";

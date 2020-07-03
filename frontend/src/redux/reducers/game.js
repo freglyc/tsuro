@@ -1,5 +1,5 @@
 import {
-    SET_BOARD,
+    SET_BOARD, SET_COUNTDOWN,
     SET_HAND,
     SET_STARTED,
     SET_TEAM,
@@ -16,7 +16,8 @@ const initialState = {
     winner: [],
     hand: [],
     started: false,
-    time: -1
+    time: -1,
+    countdown: -1
 }
 
 export default function reducer(state = initialState, action) {
@@ -37,6 +38,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, started: action.started }
         case SET_TIME:
             return { ...state, time: action.time }
+        case SET_COUNTDOWN:
+            return { ...state, countdown: action.countdown }
         default:
             return state
     }

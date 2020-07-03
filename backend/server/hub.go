@@ -59,7 +59,7 @@ func (hub *Hub) Run() {
 		case clientMessage := <-hub.broadcast:
 			handler := hub.games[clientMessage.GameID]
 			if handler == nil {
-				handler = NewHandler(tsuro.NewGame(clientMessage.GameID, clientMessage.Options))
+				handler = NewHandler(tsuro.NewGame(clientMessage.GameID, clientMessage.Options), hub)
 				hub.games[clientMessage.GameID] = handler
 			}
 			switch clientMessage.Kind {
@@ -78,16 +78,25 @@ func (hub *Hub) Run() {
 				hub.clients[clientMessage.Client] = clientMessage.GameID
 				handler.Clients[clientMessage.Client] = true
 			case "rotateRight":
-				handler.Game.RotateRight(tsuro.Team(clientMessage.Team), clientMessage.Idx)
+				handler.Game.RotateRight(clientMessage.Team, clientMessage.Idx)
 			case "rotateLeft":
-				handler.Game.RotateLeft(tsuro.Team(clientMessage.Team), clientMessage.Idx)
+				handler.Game.RotateLeft(clientMessage.Team, clientMessage.Idx)
 			case "place":
-				handler.Game.Place([]int{clientMessage.Row, clientMessage.Col}, tsuro.Team(clientMessage.Team), clientMessage.Idx)
+				handler.Game.Place([]int{clientMessage.Row, clientMessage.Col}, clientMessage.Team, clientMessage.Idx)
+				if handler.Game.Time > 0 && handler.Game.Started {
+					if len(handler.Game.Winner) > 0 {
+						handler.StopTimer()
+					} else {
+						handler.StartTimer()
+					}
+				}
 			case "reset":
 				handler.Game.Reset()
+				handler.StopTimer()
 			default:
 				log.Print("Not a valid message")
 			}
+			handler.UpdateTime() // Update countdown clock if there is one
 			data, err := json.Marshal(handler)
 			if err != nil {
 				log.Println(err)

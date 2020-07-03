@@ -1,6 +1,16 @@
 import React, { createContext } from 'react'
 import { useDispatch } from "react-redux";
-import {setBoard, setChange, setHand, setStarted, setTeams, setTime, setTurn, setWinner} from "../redux/actions";
+import {
+    setBoard,
+    setChange,
+    setCountdown,
+    setHand,
+    setStarted,
+    setTeams,
+    setTime,
+    setTurn,
+    setWinner
+} from "../redux/actions";
 
 const WebSocketContext = createContext(null)
 export { WebSocketContext }
@@ -28,6 +38,7 @@ export default ({ children }) => {
             dispatch(setHand(message.game.hand))
             dispatch(setStarted(message.game.started))
             dispatch(setTime(message.game.time))
+            dispatch(setCountdown(message.game.countdown))
             dispatch(setChange(message.game.change))
         }
         socket.onclose = () => {}

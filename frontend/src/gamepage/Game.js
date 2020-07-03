@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {WebSocketContext} from "../websocket/websocket";
 import Tile from "./Tile";
+import Timer from "./Timer";
 import {setPage, setTeam} from "../redux/actions";
 import {DropSpace} from "./DropSpace";
 import favicon from "../resources/favicons/favicon.ico"
@@ -24,15 +25,17 @@ export default function GamePage() {
     const winner = useSelector(state => state.game.winner);
     const teams = useSelector(state => state.game.teams);
     const board = useSelector(state => state.game.board);
+    const time = useSelector(state => state.game.time);
+    const players = useSelector(state => state.options.players);
     const change = useSelector(state => state.options.change);
 
     let hand = []
     teams.forEach(t => { if (t.color === team) hand = t.hand.tiles })
 
     let rotateMsg = { "gameID": gameID, "kind":"rotateRight", "team":team, "idx":-1, "row":-1, "col":-1,
-        "players":-1, "size":-1, "time":-1, "change": change }
+        "players":players, "size":6, "time":-1, "change": change }
     let resetMsg = { "gameID": gameID, "kind":"reset", "team":"Neutral", "idx":-1, "row":-1, "col":-1,
-        "players":-1, "size":-1, "time":-1, "change": change }
+        "players":players, "size":6, "time":-1, "change": change }
 
     useEffect(() => {
         if (winner.length !== 0) {
@@ -101,14 +104,7 @@ export default function GamePage() {
                         </div>
 
                         <div className="flexbox space-between full-width small-padding-top">
-                            {
-                                // this.props.started && this.props.timer ?
-                                    // <Timer time={this.props.time} currentTime={this.props.currentTime} turn={this.props.turn} winner={this.props.winner}/> :
-                                    // this.props.timer ?
-                                    //     <div className="standard-txt boldest-txt dark">time: {this.props.time}</div> :
-                                    //     <div/>
-                                <div/>
-                            }
+                            { time > 0 ? <Timer/> : <div/> }
                             <div className="flexbox flex-center">
                                 <div className="flexbox flex-center smallest-padding-right">
                                     <button className="fas fa-cog inverse gear" onClick={(e) => {

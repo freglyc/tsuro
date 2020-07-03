@@ -6,7 +6,7 @@ import {ItemTypes} from "./ItemTypes";
 import {useDrag} from "react-dnd";
 
 export default function Tile({ edges, paths, row, col, idx }) {
-    const [{}, drag] = useDrag({ item: { type: ItemTypes.TILE, idx: idx } })
+    const [, drag] = useDrag({ item: { type: ItemTypes.TILE, idx: idx } })
     const teams = useSelector(state => state.game.teams);
     let notches = [];
     for (let i = 0; i < teams.length; i++) {

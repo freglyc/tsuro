@@ -9,7 +9,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case SET_PLAYERS:
-            return { ...state, page: action.players }
+            return { ...state, players: action.players }
         case SET_TIMER:
             return { ...state, timer: action.timer }
         case SET_CHANGE:

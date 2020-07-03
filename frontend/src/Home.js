@@ -46,8 +46,9 @@ export default function HomePage() {
                         <label className="small-padding-right standard-txt boldest-txt blue" htmlFor="players">PLAYERS</label>
                         <select className="small-txt boldest-txt select inverse" name="players" id="players"
                                 onChange={(e) => {
+                                        e.stopPropagation();
                                         players = parseInt(e.target.value);
-                                        dispatch(setPlayers(players))
+                                        dispatch(setPlayers(players));
                                 }}>
                             <option value="2">2</option>
                             <option value="3">3</option>

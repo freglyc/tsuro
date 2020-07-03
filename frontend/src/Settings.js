@@ -38,11 +38,11 @@ export default function SettingsPage() {
                     </div>
                     <div className="flexbox space-between full-width medium-padding-top">
                         <div>
-                            <h2 className="standard-txt boldest-txt inverse">COLOR BLIND MODE</h2>
+                            <h2 className="standard-txt boldest-txt inverse">*WIP* COLOR BLIND MODE</h2>
                             <p className="small-txt gray">add patterns to colors to distinguish teams</p>
                         </div>
                         <label className="switch">
-                            <input type="checkbox" defaultChecked={blind} onChange={(e) => {
+                            <input disabled={true} type="checkbox" defaultChecked={blind} onChange={(e) => {
                                 e.stopPropagation();
                                 blind = !blind;
                                 dispatch(setBlind(blind))

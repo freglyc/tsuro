@@ -4,17 +4,17 @@ import {setPage} from "./redux/actions";
 
 export default function RulesPage() {
     const dispatch = useDispatch();
-    const joined = useSelector(state => state.site.joined)
+    const joined = useSelector(state => state.site.joined);
     return (
         <div className="flexbox flex-column flex-center full-height">
             <button className="absolute exit" onClick={(e) => {
                 e.preventDefault();
-                dispatch(setPage(joined ? "GAME" : "HOME"))
+                dispatch(setPage(joined ? "GAME" : "HOME"));
             }}/>
             <div className="flexbox flex-column flex-center half-width">
                 <div className="flexbox flex-column flex-center">
                     <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>Tsuro</a></h1>
-                    <h1 className="small-txt boldest-txt flex-self-end dark">RULES</h1>
+                    <h1 className="small-txt boldest-txt flex-self-end inverse">RULES</h1>
                 </div>
                 <div className="flexbox flex-column flex-self-start large-padding-top inverse standard-txt">
                     <div>

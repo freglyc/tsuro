@@ -1,6 +1,6 @@
 import {
     SET_BLIND,
-    SET_BOARD, SET_CHANGE, SET_DARK,
+    SET_BOARD, SET_CHANGE, SET_COUNTDOWN, SET_DARK,
     SET_GAMEID, SET_HAND, SET_JOINED,
     SET_PAGE,
     SET_PLAYERS, SET_STARTED, SET_TEAM, SET_TEAMS, SET_TIME, SET_TIMER, SET_TURN, SET_WINNER,
@@ -76,4 +76,8 @@ export const setStarted = (started) => ({
 export const setTime = (time) => ({
     type: SET_TIME,
     time: time
+});
+export const setCountdown = (countdown) => ({
+    type: SET_COUNTDOWN,
+    countdown: countdown
 });

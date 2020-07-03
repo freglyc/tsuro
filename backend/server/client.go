@@ -8,17 +8,9 @@ import (
 )
 
 const (
-	// Time allowed to write a message to the peer.
-	writeWait = 10 * time.Second
-
-	// Time allowed to read the next pong message from the peer.
-	pongWait = 60 * time.Second
-
-	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 9) / 10
-
-	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	pongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
+	pingPeriod     = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	maxMessageSize = 512                 // Maximum message size allowed from peer.
 )
 
 // Websocket upgrade
@@ -40,7 +32,6 @@ func (client *Client) readPump() {
 		client.hub.unregister <- client
 		_ = client.conn.Close()
 	}()
-
 	client.conn.SetReadLimit(maxMessageSize)
 	_ = client.conn.SetReadDeadline(time.Now().Add(pongWait))
 	client.conn.SetPongHandler(func(string) error { _ = client.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
@@ -51,9 +42,16 @@ func (client *Client) readPump() {
 			log.Println(err)
 			break
 		}
-		client.hub.broadcast <- ClientMessage{
-			Client:  client,
-			Message: msg,
+		// Error check msg
+		if (msg.Kind == "place" && (msg.Row < 0 || msg.Col < 0 || msg.Row > msg.Size-1 || msg.Col > msg.Size-1 || msg.Idx < 0 || msg.Idx > 2)) ||
+			((msg.Kind == "rotateRight" || msg.Kind == "rotateLeft") && (msg.Idx < 0 || msg.Idx > 2)) ||
+			msg.Players < 2 || msg.Players > 8 || msg.Size != 6 {
+			log.Println("INVALID MESSAGE")
+		} else {
+			client.hub.broadcast <- ClientMessage{
+				Client:  client,
+				Message: msg,
+			}
 		}
 	}
 }
@@ -95,7 +93,6 @@ func ServeWs(hub *Hub, response http.ResponseWriter, request *http.Request) {
 		send: make(chan []byte, 256),
 	}
 	hub.register <- client
-
 	go client.readPump()
 	go client.writePump()
 }

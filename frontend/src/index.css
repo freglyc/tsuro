@@ -288,7 +288,6 @@ input:checked + .slider:before {
   color: var(--inverse);
 }
 
-
 .neutral-background {
   background: var(--background);
 }
@@ -365,12 +364,6 @@ input:checked + .slider:before {
   border: var(--turquoise) solid 3px;
 }
 
-
-
-
-
-
-
 .flexbox {
   display: flex;
 }
@@ -418,7 +411,6 @@ input:checked + .slider:before {
 .game-width {
   width: 37%;
 }
-
 
 .quarter-width {
   width: 25%;
@@ -521,7 +513,6 @@ input:checked + .slider:before {
 .empty {
   width: calc(10vw * 0.57);
   height: calc(10vw * 0.57);
-  /*width: 100%;*/
   border: none;
   background: none;
   padding: 0;
@@ -540,52 +531,40 @@ input:checked + .slider:before {
   background: var(--lightest-gray);
 }
 
-.banner {
-  color: white;
-  background: #f44336;
-  padding: 10px;
-}
-
 /* BREAKPOINTS */
 @media(max-width: 1000px){
   .title-txt {
     font-size: 2em;
     font-weight: 900;
   }
-
   .smallest-txt {
     font-size: 0.3333em;
   }
-
   .small-txt {
     font-size: 0.5em;
   }
-
   .standard-txt {
     font-size: 0.6666em;
   }
+}
 
-  .color-input label {
-    cursor: pointer;
-    display: inline-block;
-    padding: 5px;
-    text-align: center;
-    width: 40px;
-    height: 10px;
+@media(max-width: 1024px){
+  .game-width {
+    width: 50%;
+  }
+  .empty {
+    width: calc(10vw * 0.75);
+    height: calc(10vw * 0.75);
   }
 }
 
-@media(max-width: 600px){
+@media(max-width: 500px){
   .game-width {
-    width: 65%;
+    width: 70%;
   }
-
-  .tile {
-    height: calc(10vw * 0.9);
-  }
-
-  .red-tile-blind-border, .yellow-tile-blind-border, .green-tile-blind-border, .blue-tile-blind-border {
-    border-width: 2px;
+  .empty {
+    width: calc(10vw * 1);
+    height: calc(10vw * 1);
   }
 }
 
@@ -596,26 +575,15 @@ input:checked + .slider:before {
 }
 
 @media(max-width: 425px) {
-  .half-width {
-    width: 80%;
-  }
-
   .lighter-txt {
     font-weight: normal;
   }
-
   .small-padding-right {
     padding-right: 2px;
   }
-
   .exit {
     right: 1em;
   }
-
-  .red-tile-blind-border, .yellow-tile-blind-border, .green-tile-blind-border, .blue-tile-blind-border {
-    border-width: 1px;
-  }
-
   .goBtn {
     width: 30%;
   }
