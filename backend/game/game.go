@@ -13,9 +13,10 @@ type Game struct {
 }
 
 type Options struct {
-	Players int `json:"players"` // number of players
-	Size    int `json:"size"`    // width and height of the board
-	Time    int `json:"time"`    // timer length, -1 means no timer
+	Players int  `json:"players"` // number of players
+	Size    int  `json:"size"`    // width and height of the board
+	Time    int  `json:"time"`    // timer length, -1 means no timer
+	Change  bool `json:"change"`  // true means can change, false means cannot
 }
 
 func NewGame(gameID string, options Options) *Game {

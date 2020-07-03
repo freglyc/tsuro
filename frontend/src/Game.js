@@ -1,8 +1,20 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {WebSocketContext} from "./websocket/websocket";
 import Tile from "./Tile";
 import {setPage, setTeam} from "./redux/actions";
+import favicon from "./resources/favicons/favicon.ico"
+import red from "./resources/favicons/red.ico"
+import blue from "./resources/favicons/blue.ico"
+import green from "./resources/favicons/green.ico"
+import yellow from "./resources/favicons/yellow.ico"
+import orange from "./resources/favicons/orange.ico"
+import pink from "./resources/favicons/pink.ico"
+import purple from "./resources/favicons/purple.ico"
+import turquoise from "./resources/favicons/turquoise.ico"
+
+
+
 
 export default function GamePage() {
     const dispatch = useDispatch();
@@ -14,6 +26,7 @@ export default function GamePage() {
     const winner = useSelector(state => state.game.winner);
     const teams = useSelector(state => state.game.teams);
     const board = useSelector(state => state.game.board);
+    const change = useSelector(state => state.options.change);
 
     let hand = []
     teams.forEach(t => { if (t.color === team) hand = t.hand.tiles })
@@ -27,7 +40,8 @@ export default function GamePage() {
         "col":-1,
         "players":-1,
         "size":-1,
-        "time":-1
+        "time":-1,
+        "change": change
     }
     let rotateMsg = {
         "gameID": gameID,
@@ -38,7 +52,8 @@ export default function GamePage() {
         "col":-1,
         "players":-1,
         "size":-1,
-        "time":-1
+        "time":-1,
+        "change": change
     }
     let resetMsg = {
         "gameID": gameID,
@@ -49,8 +64,27 @@ export default function GamePage() {
         "col":-1,
         "players":-1,
         "size":-1,
-        "time":-1
+        "time":-1,
+        "change": change
     }
+
+    useEffect(() => {
+        if (winner.length !== 0) {
+            document.getElementById("favicon").setAttribute("href", favicon);
+        } else {
+            let favi;
+            if (turn === "Red") favi = red;
+            else if (turn === "Yellow") favi = yellow;
+            else if (turn === "Green") favi = green;
+            else if (turn === "Blue") favi = blue;
+            else if (turn === "Orange") favi = orange;
+            else if (turn === "Purple") favi = purple;
+            else if (turn === "Pink") favi = pink;
+            else if (turn === "Turquoise") favi = turquoise;
+            else favi = favicon;
+            document.getElementById("favicon").setAttribute("href", favi);
+        }
+    })
 
     const turnColor = winner.length !== 0 ? winner[0].toLowerCase() : turn.toLowerCase();
 
@@ -67,6 +101,7 @@ export default function GamePage() {
                                 className={"team-btn " + background + " " + t.color.toLowerCase() + "-border pointer"}
                                 onClick={e => {
                                     e.stopPropagation();
+                                    if (team !== "Neutral" && !change) return
                                     dispatch(setTeam(t.color))
                                 }}/>
                         })}

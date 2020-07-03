@@ -14,6 +14,7 @@ export default function App() {
 
   const page = useSelector(state => state.site.page);
   const joined = useSelector(state => state.site.joined);
+  const change = useSelector(state => state.options.change);
 
   // Load settings
   let settings = Settings.load();
@@ -43,7 +44,8 @@ export default function App() {
           "col":-1,
           "players":2,
           "size":6,
-          "time":-1
+          "time":-1,
+          "change": change
         };
         ws.sendMessage(data);
         dispatch(setJoined(true))

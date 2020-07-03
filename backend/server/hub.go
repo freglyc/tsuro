@@ -13,7 +13,6 @@ type Message struct {
 	Idx    int        `json:"idx"`
 	Row    int        `json:"row"`
 	Col    int        `json:"col"`
-
 	tsuro.Options
 }
 
@@ -44,10 +43,8 @@ func (hub *Hub) Run() {
 	for {
 		select {
 		case client := <-hub.register:
-			log.Println("CLIENT REGISTERED")
 			hub.clients[client] = ""
 		case client := <-hub.unregister:
-			log.Println("CLIENT UNREGISTERED")
 			gameID := hub.clients[client]
 			if gameID != "" {
 				if handler := hub.games[gameID]; handler != nil {
@@ -60,7 +57,6 @@ func (hub *Hub) Run() {
 			delete(hub.clients, client)
 			close(client.send)
 		case clientMessage := <-hub.broadcast:
-			log.Println(clientMessage)
 			handler := hub.games[clientMessage.GameID]
 			if handler == nil {
 				handler = NewHandler(tsuro.NewGame(clientMessage.GameID, clientMessage.Options))
@@ -92,13 +88,11 @@ func (hub *Hub) Run() {
 			default:
 				log.Print("Not a valid message")
 			}
-
 			data, err := json.Marshal(handler)
 			if err != nil {
 				log.Println(err)
 				return
 			}
-
 			for client := range handler.Clients {
 				select {
 				case client.send <- data:

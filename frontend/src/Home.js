@@ -25,7 +25,8 @@ export default function HomePage() {
             "col":-1,
             "players": players,
             "size":6,
-            "time": timer ? 20 : -1
+            "time": timer ? 20 : -1,
+            "change": change
         };
         ws.sendMessage(data);
         dispatch(setJoined(true));
