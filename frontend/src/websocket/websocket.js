@@ -16,7 +16,7 @@ const WebSocketContext = createContext(null)
 export { WebSocketContext }
 
 export default ({ children }) => {
-    let server = "localhost:8080"
+    let server = "fregly-tsuro.herokuapp.com"
     let socket;
     let ws;
 
@@ -27,7 +27,7 @@ export default ({ children }) => {
         }, 250)
     }
     if (!socket) {
-        socket = new WebSocket('ws://' + server + '/ws');
+        socket = new WebSocket('wss://' + server + '/ws');
         socket.onopen = () => {}
         socket.onmessage = (msg) => {
             const message = JSON.parse(msg.data)
