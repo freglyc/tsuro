@@ -1,13 +1,11 @@
 package main
 
 import (
-	"flag"
 	"github.com/freglyc/tsuro/server"
 	"log"
 	"net/http"
+	"os"
 )
-
-var addr = flag.String("addr", ":8080", "http service address")
 
 func serveHome(response http.ResponseWriter, request *http.Request) {
 	if request.URL.Path != "/" {
@@ -22,14 +20,15 @@ func serveHome(response http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	flag.Parse()
+	//_ = os.Setenv("PORT", "8080")
+	var addr = ":" + os.Getenv("PORT")
 	hub := server.NewHub()
 	go hub.Run()
 	http.HandleFunc("/", serveHome)
 	http.HandleFunc("/ws", func(response http.ResponseWriter, request *http.Request) {
 		server.ServeWs(hub, response, request)
 	})
-	err := http.ListenAndServe(*addr, nil)
+	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
