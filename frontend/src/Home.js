@@ -27,7 +27,7 @@ export default function HomePage() {
             <div className="flexbox flex-column flex-center half-width">
                 <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>Tsuro</a></h1>
                 <p className="standard-txt lighter-txt gray large-padding-top">
-                    Play 2-8 player Tsuro against friends on one or more devices.
+                    Play two to eight player Tsuro online against friends.
                     To create a game or join an existing one, enter a game ID and click 'Go'.
                 </p>
                 <form className="flexbox large-padding-top full-width" onSubmit={handleClick}>
