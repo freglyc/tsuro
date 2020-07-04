@@ -79,7 +79,7 @@ export default function HomePage() {
                                     timer = !timer;
                                     dispatch(setTimer(timer));
                                 }}/>
-                                <span className="slider round"/>
+                                <span className="slider round pointer"/>
                             </label>
                         </div>
                         <div className="flexbox space-between full-width medium-padding-top">
@@ -93,7 +93,7 @@ export default function HomePage() {
                                     change = !change;
                                     dispatch(setChange(change));
                                 }}/>
-                                <span className="slider round"/>
+                                <span className="slider round pointer"/>
                             </label>
                         </div>
                     </div> : null

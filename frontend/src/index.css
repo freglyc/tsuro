@@ -76,7 +76,6 @@ input:focus {outline: var(--blue) dashed 0.1em;}
 
 .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
@@ -112,6 +111,10 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
   background-color: white;
+}
+
+.disabled {
+  opacity: 0.5;
 }
 
 /* Rounded sliders */

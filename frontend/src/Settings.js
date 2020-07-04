@@ -33,7 +33,7 @@ export default function SettingsPage() {
                                 if (dark) document.body.setAttribute('data-theme', 'dark');
                                 else document.body.removeAttribute('data-theme')
                             }}/>
-                            <span className="slider round"/>
+                            <span className="slider round pointer"/>
                         </label>
                     </div>
                     <div className="flexbox space-between full-width medium-padding-top">
@@ -48,7 +48,7 @@ export default function SettingsPage() {
                                 dispatch(setBlind(blind))
                                 Settings.save({"dark": dark, "blind": blind});
                             }}/>
-                            <span className="slider round"/>
+                            <span className="slider round disabled"/>
                         </label>
                     </div>
                 </div>
