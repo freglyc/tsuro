@@ -44,7 +44,7 @@ func (game *Game) GetPlayer(team Team) int {
 // Get the team with the dragon tile, Neutral otherwise
 func (game *Game) GetDragonTeam() Team {
 	for _, t := range game.Teams {
-		if t.Dragon {
+		if t.Dragon && t.Token.Notch != None {
 			return t.Color
 		}
 	}
@@ -253,7 +253,7 @@ func (game *Game) UpdateHands(turn Team) {
 	// Give the first draw to the dragon player
 	if dragon != Neutral {
 		active = game.Teams[game.GetPlayer(dragon)]
-		active.Dragon = false
+		game.Teams[game.GetPlayer(dragon)].Dragon = false
 	} else {
 		active = game.Teams[game.GetPlayer(turn)]
 		// Update active if dead
@@ -269,13 +269,21 @@ func (game *Game) UpdateHands(turn Team) {
 		}
 		// If other players do not have full hands fill them
 		if len(game.Deck.Tiles) > 0 && game.GetNumToFillHands() > 0 {
-			game.UpdateHands(game.GetNextTurn(turn))
+			if dragon != Neutral {
+				game.UpdateHands(turn)
+			} else {
+				game.UpdateHands(game.GetNextTurn(turn))
+			}
 		}
 	} else if game.Options.Players > 2 {
-		for _, player := range game.Teams {
-			player.Dragon = false
+		for i := 0; i < len(game.Teams); i++ {
+			game.Teams[i].Dragon = false
 		}
-		active.Dragon = true
+		if dragon != Neutral {
+			game.Teams[game.GetPlayer(dragon)].Dragon = true
+		} else {
+			game.Teams[game.GetPlayer(turn)].Dragon = true
+		}
 	}
 }
 

@@ -28,6 +28,7 @@ export default function GamePage() {
     const time = useSelector(state => state.game.time);
     const players = useSelector(state => state.options.players);
     const change = useSelector(state => state.options.change);
+    const connected = useSelector(state => state.site.connected);
 
     let hand = []
     teams.forEach(t => { if (t.color === team) hand = t.hand.tiles })
@@ -56,8 +57,15 @@ export default function GamePage() {
     })
 
     const turnColor = winner.length !== 0 ? winner[0].toLowerCase() : turn.toLowerCase();
+    let timeoutBanner = null;
+    setTimeout(() => {
+        timeoutBanner = !connected ? <div className="banner standard-txt flexbox flex-center flex-column full-width">
+            Connection timeout. Please refresh the page.
+        </div> : null
+    }, 250);
     return (
         <div className="flexbox flex-column flex-center full-height">
+            { timeoutBanner }
             <div className="flexbox flex-column flex-center full-width">
                 <h1 className="title-txt large-padding-top"><a className="red remove-hyperlink" href={'http://' + window.location.host}>Tsuro</a></h1>
 

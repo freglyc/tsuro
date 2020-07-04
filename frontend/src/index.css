@@ -113,6 +113,12 @@ input:checked + .slider:before {
   background-color: white;
 }
 
+.banner {
+  color: white;
+  background: var(--red);
+  padding: 10px;
+}
+
 .disabled {
   opacity: 0.5;
 }
@@ -336,35 +342,35 @@ input:checked + .slider:before {
 }
 
 .red-border {
-  border: var(--red) solid 3px;
+  border: var(--red) solid 5px;
 }
 
 .yellow-border {
-  border: var(--yellow) solid 3px;
+  border: var(--yellow) solid 5px;
 }
 
 .green-border {
-  border: var(--green) solid 3px;
+  border: var(--green) solid 5px;
 }
 
 .blue-border {
-  border: var(--blue) solid 3px;
+  border: var(--blue) solid 5px;
 }
 
 .orange-border {
-  border: var(--orange) solid 3px;
+  border: var(--orange) solid 5px;
 }
 
 .purple-border {
-  border: var(--purple) solid 3px;
+  border: var(--purple) solid 5px;
 }
 
 .pink-border {
-  border: var(--pink) solid 3px;
+  border: var(--pink) solid 5px;
 }
 
 .turquoise-border {
-  border: var(--turquoise) solid 3px;
+  border: var(--turquoise) solid 5px;
 }
 
 .flexbox {

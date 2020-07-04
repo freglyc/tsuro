@@ -1,8 +1,9 @@
 import React, { createContext } from 'react'
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     setBoard,
     setChange,
+    setConnected,
     setCountdown,
     setHand,
     setStarted,
@@ -19,16 +20,22 @@ export default ({ children }) => {
     let server = "fregly-tsuro.herokuapp.com"
     let socket;
     let ws;
+    let connected = useSelector(state => state.site.connected);
+    let queue = [] // holds queue of backlogged messages to be sent if not connected
 
     const dispatch = useDispatch();
     const sendMessage = (msg) => {
-        setTimeout(() => {
-            socket.send(JSON.stringify(msg))
-        }, 250)
+        if (connected) socket.send(JSON.stringify(msg))
+        else if (!queue.includes(msg)) queue.push(msg)
     }
     if (!socket) {
         socket = new WebSocket('wss://' + server + '/ws');
-        socket.onopen = () => {}
+        socket.onopen = () => {
+            connected = true
+            dispatch(setConnected(connected))
+            for (let i = 0; i < queue.length; i++) sendMessage(queue[i])
+            queue = []
+        }
         socket.onmessage = (msg) => {
             const message = JSON.parse(msg.data)
             dispatch(setTeams(message.game.teams))
@@ -41,7 +48,10 @@ export default ({ children }) => {
             dispatch(setCountdown(message.game.countdown))
             dispatch(setChange(message.game.change))
         }
-        socket.onclose = () => {}
+        socket.onclose = () => {
+            connected = false
+            dispatch(setConnected(connected))
+        }
         ws = {
             socket: socket,
             sendMessage

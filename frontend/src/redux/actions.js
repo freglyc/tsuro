@@ -1,6 +1,6 @@
 import {
     SET_BLIND,
-    SET_BOARD, SET_CHANGE, SET_COUNTDOWN, SET_DARK,
+    SET_BOARD, SET_CHANGE, SET_CONNECTED, SET_COUNTDOWN, SET_DARK,
     SET_GAMEID, SET_HAND, SET_JOINED,
     SET_PAGE,
     SET_PLAYERS, SET_STARTED, SET_TEAM, SET_TEAMS, SET_TIME, SET_TIMER, SET_TURN, SET_WINNER,
@@ -18,6 +18,10 @@ export const setTimer = (timer) => ({
 export const setChange = (change) => ({
     type: SET_CHANGE,
     change: change
+});
+export const setConnected = (connected) => ({
+    type: SET_CONNECTED,
+    connected: connected
 });
 
 // Settings
