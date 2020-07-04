@@ -85,7 +85,7 @@ export default function HomePage() {
                         <div className="flexbox space-between full-width medium-padding-top">
                             <div>
                                 <h2 className="standard-txt boldest-txt inverse">TEAM CHANGE</h2>
-                                <p className="small-txt gray">allow players to changing teams after first selecting one</p>
+                                <p className="small-txt gray">allow players to change teams after first selecting one</p>
                             </div>
                             <label className="switch">
                                 <input type="checkbox" defaultChecked={change} onChange={(e) => {
