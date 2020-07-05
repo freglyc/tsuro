@@ -245,7 +245,7 @@ func (game *Game) UpdateWinner() {
 
 // Update team hands
 func (game *Game) UpdateHands(turn Team) {
-	if turn == Neutral {
+	if len(game.Winner) > 0 {
 		return
 	}
 	dragon := game.GetDragonTeam()
