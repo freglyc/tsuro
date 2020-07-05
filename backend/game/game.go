@@ -267,7 +267,7 @@ func (game *Game) UpdateHands(turn Team) {
 		if len(game.Deck.Tiles) > 0 {
 			game.Teams[playerIdx].Dragon = false
 			game.Teams[playerIdx].Hand.Add(game.Deck.Draw())
-			game.UpdateHands(game.GetNextTurn(turn))
+			game.UpdateHands(game.GetNextTurn(dragon))
 		}
 	} else {
 		var nextTurn = turn
