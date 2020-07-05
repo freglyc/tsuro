@@ -225,14 +225,27 @@ func (game *Game) UpdateWinner() {
 			dead = append(dead, player.Color)
 		}
 	}
+	// If dragon and lost then update dragon
+	dragon := game.GetDragonTeam()
+	if dragon != Neutral && game.Teams[game.GetPlayer(dragon)].Token.Notch == None {
+		var nextTurn = game.GetNextTurn(game.Teams[game.GetPlayer(dragon)].Color)
+		playerIdx := game.GetPlayer(nextTurn)
+		for game.Teams[playerIdx].Token.Notch == None {
+			nextTurn = game.GetNextTurn(nextTurn)
+			playerIdx = game.GetPlayer(nextTurn)
+		}
+		game.Teams[game.GetPlayer(dragon)].Dragon = false
+		game.Teams[playerIdx].Dragon = true
+	}
+	// Add back tiles of dead players to hand
 	for i := 0; i < len(dead); i++ {
 		p := game.Teams[game.GetPlayer(dead[i])]
-		// Add back tiles of dead players to hand
 		for i := 0; i < len(p.Hand.Tiles); i++ {
 			game.Deck.Add(p.Hand.Tiles[i])
 		}
 		game.Teams[game.GetPlayer(dead[i])].Hand.RemoveAll()
 	}
+	// Update winner
 	if len(alive) == 0 {
 		game.Winner = []Team{game.Losers[len(game.Losers)-1], game.Losers[len(game.Losers)-2]}
 		return
@@ -249,63 +262,41 @@ func (game *Game) UpdateHands(turn Team) {
 		return
 	}
 	dragon := game.GetDragonTeam()
-	var active Player
-	// Give the first draw to the dragon player
 	if dragon != Neutral {
-		active = game.Teams[game.GetPlayer(dragon)]
-		game.Teams[game.GetPlayer(dragon)].Dragon = false
+		playerIdx := game.GetPlayer(dragon)
+		if len(game.Deck.Tiles) > 0 {
+			game.Teams[playerIdx].Dragon = false
+			game.Teams[playerIdx].Hand.Add(game.Deck.Draw())
+			game.UpdateHands(game.GetNextTurn(turn))
+		}
 	} else {
-		active = game.Teams[game.GetPlayer(turn)]
-		// Update active if dead
-		for active.Token.Notch == None {
-			turn = game.GetNextTurn(turn)
-			active = game.Teams[game.GetPlayer(turn)]
+		var nextTurn = turn
+		playerIdx := game.GetPlayer(nextTurn)
+		for game.Teams[playerIdx].Token.Notch == None {
+			nextTurn = game.GetNextTurn(nextTurn)
+			playerIdx = game.GetPlayer(nextTurn)
 		}
-	}
-	if len(game.Deck.Tiles) > 0 {
-		// Add tile to team hand if needed
-		if len(active.Hand.Tiles) < 3 {
-			active.Hand.Add(game.Deck.Draw())
-		}
-		// If other players do not have full hands fill them
-		if len(game.Deck.Tiles) > 0 && game.GetNumToFillHands() > 0 {
-			if dragon != Neutral {
-				game.UpdateHands(turn)
-			} else {
-				game.UpdateHands(game.GetNextTurn(turn))
-			}
-		}
-	} else if game.Options.Players > 2 {
-		for i := 0; i < len(game.Teams); i++ {
-			game.Teams[i].Dragon = false
-		}
-		if dragon != Neutral {
-			game.Teams[game.GetPlayer(dragon)].Dragon = true
+		if len(game.Deck.Tiles) > 0 && len(game.Teams[playerIdx].Hand.Tiles) < 3 {
+			game.Teams[playerIdx].Hand.Add(game.Deck.Draw())
+			game.UpdateHands(game.GetNextTurn(nextTurn))
 		} else {
-			game.Teams[game.GetPlayer(turn)].Dragon = true
+			game.Teams[playerIdx].Dragon = true
 		}
 	}
 }
 
 // Update turn
 func (game *Game) UpdateTurn() {
-	alive := map[Team]bool{}
-	for _, player := range game.Teams {
-		if player.Token.Notch != None {
-			alive[player.Color] = true
-		} else {
-			alive[player.Color] = false
-		}
+	if len(game.Winner) > 0 {
+		return
 	}
-	count := 0
-	for {
-		turn := game.GetNextTurn(game.Turn)
-		game.GameState.Turn = turn
-		if alive[turn] || count > 8 {
-			break
-		}
-		count += 1
+	var nextTurn = game.GetNextTurn(game.GameState.Turn)
+	playerIdx := game.GetPlayer(nextTurn)
+	for game.Teams[playerIdx].Token.Notch == None {
+		nextTurn = game.GetNextTurn(nextTurn)
+		playerIdx = game.GetPlayer(nextTurn)
 	}
+	game.GameState.Turn = nextTurn
 }
 
 // Updates game state after a team places a tile
