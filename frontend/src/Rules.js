@@ -18,7 +18,7 @@ export default function RulesPage() {
                 </div>
                 <div className="flexbox flex-column flex-self-start large-padding-top inverse standard-txt">
                     <div>
-                        <span className="boldest-txt">OVERVIEW:</span>
+                        <span className="boldest-txt">OVERVIEW: </span>
                         Tsuro is a 2-8 player board game where players place tiles on the board to build paths beginning
                         at the edges and travel around the interior. The goal of the game is to keep your path from
                         leading off the board and from running into other players. The last player(s) standing wins.
