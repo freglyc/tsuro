@@ -26,6 +26,7 @@ export default function GamePage() {
     const teams = useSelector(state => state.game.teams);
     const board = useSelector(state => state.game.board);
     const time = useSelector(state => state.game.time);
+    const started = useSelector(state => state.game.started);
     const players = useSelector(state => state.options.players);
     const change = useSelector(state => state.options.change);
     const connected = useSelector(state => state.site.connected);
@@ -57,6 +58,7 @@ export default function GamePage() {
     })
 
     const turnColor = winner.length !== 0 ? winner[0].toLowerCase() : turn.toLowerCase();
+    const glow = started ? "" : "glow";
     let timeoutBanner = null;
     setTimeout(() => {
         timeoutBanner = !connected ? <div className="banner standard-txt flexbox flex-center flex-column full-width">
@@ -127,7 +129,7 @@ export default function GamePage() {
                                     <button onClick={(e) => {
                                         e.preventDefault();
                                         dispatch(setPage("RULES"));
-                                    }} className="resetBtn smallest-txt bolder-txt">rules</button>
+                                    }} className={glow + " resetBtn smallest-txt bolder-txt"}>rules</button>
                                 </div>
                                 <div className="flexbox flex-center">
                                     <button onClick={e => {

@@ -540,6 +540,37 @@ input:checked + .slider:before {
   background: var(--lightest-gray);
 }
 
+.glow {
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}
+
+@-webkit-keyframes glowing {
+  0% { background-color: var(--red); color: white; opacity: 0.5; }
+  50% { background-color: var(--red); color: white; opacity: 0.75; }
+  100% { background-color: var(--red); color: white; opacity: 1; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: var(--red); color: white; opacity: 0.5; }
+  50% { background-color: var(--red); color: white; opacity: 0.75; }
+  100% { background-color: var(--red); color: white; opacity: 1; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: var(--red); color: white; opacity: 0.5; }
+  50% { background-color: var(--red); color: white; opacity: 0.75; }
+  100% { background-color: var(--red); color: white; opacity: 1; }
+}
+
+@keyframes glowing {
+  0% { background-color: var(--red); color: white; opacity: 0.5; }
+  50% { background-color: var(--red); color: white; opacity: 0.75; }
+  100% { background-color: var(--red); color: white; opacity: 1; }
+}
+
 /* BREAKPOINTS */
 @media(max-width: 1000px){
   .title-txt {
