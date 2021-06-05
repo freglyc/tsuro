@@ -18,21 +18,21 @@ export default function App() {
   // Load settings
   let settings = Settings.load();
   if (settings.dark) {
-    dispatch(setDark(settings.dark))
+    dispatch(setDark(settings.dark));
     document.body.setAttribute('data-theme', 'dark');
-  } else document.body.removeAttribute('data-theme')
-  if (settings.blind) dispatch(setBlind(settings.blind))
+  } else document.body.removeAttribute('data-theme');
+  if (settings.blind) dispatch(setBlind(settings.blind));
 
   // Select page to render
   let render = <HomePage/>;
-  if (page === "SETTINGS") render = <SettingsPage/>
-  else if (page === "RULES") render = <RulesPage/>
-  else if (page === "GAME") render = <GamePage/>
+  if (page === "SETTINGS") render = <SettingsPage/>;
+  else if (page === "RULES") render = <RulesPage/>;
+  else if (page === "GAME") render = <GamePage/>;
 
   // Connect to game if url has gameID
   useEffect(() => {
       if (document.location.pathname !== "/" && !joined) {
-        const gameID = document.location.pathname.slice(1)
+        const gameID = document.location.pathname.slice(1);
         dispatch(setGameID(gameID))
         let data = { "gameID": gameID, "kind":"join", "team":"Neutral", "idx":-1, "row":-1, "col":-1,
           "players":2, "size":6, "time":-1, "change": change };
@@ -40,6 +40,12 @@ export default function App() {
         dispatch(setJoined(true))
         dispatch(setPage("GAME"))
       }
-  })
-  return (<div> { render } </div>)
+  });
+  return (
+      <div>
+        <div className={"quibbble-banner"}>
+          <a className={"quibbble"} href={"https://www.quibbble.com"} target="_blank">Quibbble.com</a>&nbsp;out now. Play Tsuro and more all for free!
+        </div>
+        { render }
+      </div>)
 }

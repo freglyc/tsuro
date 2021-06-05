@@ -49,6 +49,24 @@ button:focus {outline:0;}
 
 input:focus {outline: var(--blue) dashed 0.1em;}
 
+.quibbble {
+  font-weight: bold;
+  color: white;
+}
+
+.quibbble:hover {
+  color: var(--purple);
+}
+
+.quibbble-banner {
+  color: white;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #8733E4;
+  padding: 12px 10px;
+}
+
 .absolute {
   position: absolute;
 }
