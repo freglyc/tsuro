@@ -6,19 +6,19 @@ import (
 )
 
 type GameHandler struct {
-	Game    *tsuro.Game      `json:"game"` // Game
-	Hub     *Hub             `json:"-"`    // Hub
-	Clients map[*Client]bool `json:"-"`    // Holds mapping of clients subscribed to the game
-	Timer   *time.Timer      `json:"-"`    // Turn timer that may or may not be enabled
-	End     time.Time        `json:"-"`    // Timer end time
+	CreatedAt time.Time   `json:"-"`    // Time created
+	Game      *tsuro.Game `json:"game"` // Game
+	Hub       *Hub        `json:"-"`    // Hub
+	Timer     *time.Timer `json:"-"`    // Turn timer that may or may not be enabled
+	End       time.Time   `json:"-"`    // Timer end time
 }
 
 func NewHandler(game *tsuro.Game, hub *Hub) *GameHandler {
 	return &GameHandler{
-		Game:    game,
-		Hub:     hub,
-		Clients: make(map[*Client]bool),
-		Timer:   nil,
+		CreatedAt: time.Now(),
+		Game:      game,
+		Hub:       hub,
+		Timer:     nil,
 	}
 }
 

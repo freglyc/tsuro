@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/freglyc/tsuro/game"
 	"log"
+	"time"
 )
 
 type Message struct {
@@ -27,6 +28,7 @@ type Hub struct {
 	broadcast  chan ClientMessage      // inbound messages from client connections
 	register   chan *Client            // register requests from clients to the hub
 	unregister chan *Client            // unregister requests from clients to the hub
+	remove     chan string             // removes a game
 }
 
 func NewHub() *Hub {
@@ -36,26 +38,23 @@ func NewHub() *Hub {
 		broadcast:  make(chan ClientMessage),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
+		remove:     make(chan string),
 	}
 }
 
 func (hub *Hub) Run() {
+	go hub.clean()
 	for {
 		select {
 		case client := <-hub.register:
 			hub.clients[client] = ""
 		case client := <-hub.unregister:
-			gameID := hub.clients[client]
-			if gameID != "" {
-				if handler := hub.games[gameID]; handler != nil {
-					delete(handler.Clients, client)
-					if len(handler.Clients) == 0 {
-						delete(hub.games, gameID)
-					}
-				}
-			}
 			delete(hub.clients, client)
-			close(client.send)
+			if !byteChanIsClosed(client.send) {
+				close(client.send)
+			}
+		case gameID := <-hub.remove:
+			delete(hub.games, gameID)
 		case clientMessage := <-hub.broadcast:
 			handler := hub.games[clientMessage.GameID]
 			if handler == nil {
@@ -64,19 +63,7 @@ func (hub *Hub) Run() {
 			}
 			switch clientMessage.Kind {
 			case "join":
-				// Leave other game if in one
-				oldID := hub.clients[clientMessage.Client]
-				if oldID != "" {
-					if handler := hub.games[oldID]; handler != nil {
-						delete(handler.Clients, clientMessage.Client)
-						if len(handler.Clients) == 0 {
-							delete(hub.games, oldID)
-						}
-					}
-				}
-				// Add to game
 				hub.clients[clientMessage.Client] = clientMessage.GameID
-				handler.Clients[clientMessage.Client] = true
 			case "rotateRight":
 				handler.Game.RotateRight(clientMessage.Team, clientMessage.Idx)
 			case "rotateLeft":
@@ -91,8 +78,8 @@ func (hub *Hub) Run() {
 					}
 				}
 			case "reset":
-				handler.Game.Reset()
 				handler.StopTimer()
+				handler.Game.Reset()
 			default:
 				log.Print("Not a valid message")
 			}
@@ -102,17 +89,39 @@ func (hub *Hub) Run() {
 				log.Println(err)
 				return
 			}
-			for client := range handler.Clients {
-				select {
-				case client.send <- data:
-				default:
-					close(client.send)
-					delete(handler.Clients, client)
-					if len(handler.Clients) == 0 {
-						delete(hub.games, clientMessage.GameID)
+			for client, gameID := range hub.clients {
+				if gameID == clientMessage.GameID {
+					select {
+					case client.send <- data:
+					default:
+						delete(hub.clients, client)
+						if !byteChanIsClosed(client.send) {
+							close(client.send)
+						}
 					}
 				}
 			}
 		}
 	}
+}
+
+func (hub *Hub) clean() {
+	// every hour remove 3 hour old games
+	for range time.Tick(time.Hour) {
+		for gameID, gameServer := range hub.games {
+			deleteTime := gameServer.CreatedAt.Add(time.Duration(3) * time.Hour)
+			if time.Now().After(deleteTime) {
+				hub.remove <- gameID
+			}
+		}
+	}
+}
+
+func byteChanIsClosed(ch <-chan []byte) bool {
+	select {
+	case <-ch:
+		return true
+	default:
+	}
+	return false
 }
