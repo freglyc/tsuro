@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	writeWait      = 10 * time.Second    // Time allowed to write a message to the peer.
 	pongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
 	pingPeriod     = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
 	maxMessageSize = 512                 // Maximum message size allowed from peer.
@@ -16,6 +17,8 @@ const (
 
 // Websocket upgrade
 var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
@@ -71,6 +74,7 @@ func (client *Client) writePump(wg *sync.WaitGroup) {
 	for {
 		select {
 		case message, ok := <-client.send:
+			_ = client.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				_ = client.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
@@ -79,6 +83,7 @@ func (client *Client) writePump(wg *sync.WaitGroup) {
 				return
 			}
 		case <-ticker.C:
+			_ = client.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := client.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}

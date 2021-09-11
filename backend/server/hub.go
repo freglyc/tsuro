@@ -49,10 +49,10 @@ func (hub *Hub) Run() {
 		case client := <-hub.register:
 			hub.clients[client] = ""
 		case client := <-hub.unregister:
-			delete(hub.clients, client)
 			if !byteChanIsClosed(client.send) {
 				close(client.send)
 			}
+			delete(hub.clients, client)
 		case gameID := <-hub.remove:
 			delete(hub.games, gameID)
 		case clientMessage := <-hub.broadcast:
@@ -94,10 +94,10 @@ func (hub *Hub) Run() {
 					select {
 					case client.send <- data:
 					default:
-						delete(hub.clients, client)
 						if !byteChanIsClosed(client.send) {
 							close(client.send)
 						}
+						delete(hub.clients, client)
 					}
 				}
 			}
