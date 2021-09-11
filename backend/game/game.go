@@ -80,7 +80,11 @@ func (game *Game) GetNumTileOnBoard() int {
 
 // Get the space that the player can team can play a tile ASSUMING the makers have been updated
 func (game *Game) GetSpace(team Team) []int {
-	player := game.Teams[game.GetPlayer(team)]
+	index := game.GetPlayer(team)
+	if index < 0 {
+		return []int{}
+	}
+	player := game.Teams[index]
 	var space []int
 	// Return next space to go to
 	switch player.Token.Notch {
@@ -331,7 +335,11 @@ func (game *Game) RotateLeft(team Team, idx int) {
 // Place a tile on the board in an open position
 func (game *Game) Place(space []int, team Team, idx int) {
 	check := game.GetSpace(team)
-	player := game.Teams[game.GetPlayer(team)]
+	index := game.GetPlayer(team)
+	if index < 0 {
+		return
+	}
+	player := game.Teams[index]
 	if game.Turn == team && // team turn
 		idx < len(player.Hand.Tiles) && // the index is in the hands bounds
 		((player.Plays == 0 && space[0] == player.Token.Row && space[1] == player.Token.Col) ||
