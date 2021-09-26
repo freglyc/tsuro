@@ -43,9 +43,9 @@ export default function App() {
   });
   return (
       <div>
-        <div className={"quibbble-banner"}>
-          <a className={"quibbble"} href={"https://www.quibbble.com"} target="_blank">Quibbble.com</a>&nbsp;out now. Play Tsuro and more all for free!
-        </div>
+        {/*<div className={"quibbble-banner"}>*/}
+        {/*  <a className={"quibbble"} href={"https://www.quibbble.com"} target="_blank">Quibbble.com</a>&nbsp;out now. Play Tsuro and more all for free!*/}
+        {/*</div>*/}
         { render }
       </div>)
 }
